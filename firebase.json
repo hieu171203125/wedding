@@ -1,26 +1,54 @@
 {
-  "hosting": {
-    "public": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      ".github/**",
-      "**/node_modules/**",
-      "apps-script/**",
-      "13-9/**",
-      "feedback/**",
-      "**/*.JPG",
-      "Screenshot_*"
-    ],
-    "headers": [
-      {
-        "source": "**/*.@(webp|png|svg|mp3)",
-        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
-      },
-      {
-        "source": "**/*.@(html|css|js)",
-        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "site": "hieu-chi-wedding",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        ".github/**",
+        "**/node_modules/**",
+        "apps-script/**",
+        "13-9/**",
+        "feedback/**",
+        "**/*.JPG",
+        "Screenshot_*"
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(webp|png|svg|mp3)",
+          "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+        },
+        {
+          "source": "**/*.@(html|css|js)",
+          "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+        }
+      ]
+    },
+    {
+      "site": "wedding-44ae2",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        ".github/**",
+        "**/node_modules/**",
+        "apps-script/**",
+        "13-9/**",
+        "feedback/**",
+        "**/*.JPG",
+        "Screenshot_*"
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(webp|png|svg|mp3)",
+          "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+        },
+        {
+          "source": "**/*.@(html|css|js)",
+          "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+        }
+      ]
+    }
+  ]
 }
