@@ -451,7 +451,9 @@
      ========================================================= */
   $$(".card[data-address]").forEach((card) => {
     const link = $("[data-dir]", card);
-    link.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(card.dataset.address)}`;
+    // Có tọa độ ghim (data-dest) thì chỉ đường tới đúng điểm đó, không thì tìm theo địa chỉ
+    const dest = card.dataset.dest || card.dataset.address;
+    link.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
     link.setAttribute("aria-label", `Chỉ đường tới ${$("h3", card).textContent} trên Google Maps`);
     // Bấm vào bất kỳ đâu trên thẻ cũng mở Google Maps (điện thoại sẽ mở app Maps)
     card.addEventListener("click", (e) => {
