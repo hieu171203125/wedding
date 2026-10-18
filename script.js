@@ -711,7 +711,8 @@
 
   // URL "Ứng dụng web" của Google Apps Script (xem apps-script/Code.gs).
   // Để trống -> lời chúc chỉ lưu trên trình duyệt của khách như trước.
-  const WISHES_API = "";
+  const WISHES_API =
+    "https://script.google.com/macros/s/AKfycbxYEQibEHW2eeIwDprgk3wwp1DKDPPCFUVU0w3isttvxDtKmCbU0dly2nSEGepb4tk/exec";
   let remoteWishes = null; // lời chúc của mọi khách, lấy từ Google Sheet
 
   function loadWishes() {
