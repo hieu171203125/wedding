@@ -58,7 +58,6 @@
       <a href="#event">Lễ cưới</a>
       <a href="#gallery">Album</a>
       <a href="#wishes">Lời chúc</a>
-      <a href="#gift">Mừng cưới</a>
     </nav>
   </header>
 
@@ -80,7 +79,6 @@
           </h1>
           <div class="divider a-fade"><span>❦</span></div>
           <p class="hero__date a-up">Chủ nhật · 29.11.2026</p>
-          <p class="hero__place a-up">Tức ngày 21 tháng 10 năm Bính Ngọ</p>
           <p class="hero__poem a-up">
             Miếng trầu ăn kết làm đôi<br />
             Lá trầu là vợ, cau tươi là chồng<br />
@@ -157,7 +155,7 @@
         <p class="eyebrow a-up">Save the date</p>
         <h2 class="section__title a-mask">Ngày Chung Đôi</h2>
         <p class="section__sub a-up">Kể từ khoảnh khắc này, chúng ta sẽ cùng nhau già đi</p>
-        <div class="countdown a-up" id="countdown" data-date="2026-11-29T00:00:00+07:00" data-lunar="Tức ngày 21 tháng 10 năm Bính Ngọ">
+        <div class="countdown a-up" id="countdown" data-date="2026-11-29T00:00:00+07:00">
           <div class="countdown__item"><span data-unit="days">00</span><small>Ngày</small></div>
           <div class="countdown__item"><span data-unit="hours">00</span><small>Giờ</small></div>
           <div class="countdown__item"><span data-unit="minutes">00</span><small>Phút</small></div>
@@ -178,7 +176,6 @@
             <p class="card__tag">Nhà trai</p>
             <h3>Lễ Thành Hôn</h3>
             <p class="card__time">Chủ nhật 29.11.2026 · Giờ: đang cập nhật</p>
-            <p class="card__lunar">Tức ngày 21 tháng 10 năm Bính Ngọ</p>
             <p class="card__addr">Tư gia nhà trai · 13 Hoàng Bùi Hoàn, thôn Phú Thọ, xã Lưu Vệ, tỉnh Thanh Hóa</p>
             <p class="card__host">Ông Nguyễn Văn Hồng · Bà Bùi Thị Hồng</p>
             <div class="card__actions">
@@ -190,7 +187,6 @@
             <p class="card__tag">Nhà gái</p>
             <h3>Lễ Vu Quy</h3>
             <p class="card__time">Chủ nhật 29.11.2026 · Giờ: đang cập nhật</p>
-            <p class="card__lunar">Tức ngày 21 tháng 10 năm Bính Ngọ</p>
             <p class="card__addr">Tư gia nhà gái · Thôn Nhật Tân, phường Trà Lý, tỉnh Hưng Yên</p>
             <p class="card__host">Ông Nguyễn Quang Dự · Bà Vũ Thị Lanh</p>
             <div class="card__actions">
@@ -212,13 +208,28 @@
         <p class="eyebrow a-up">Khoảnh khắc</p>
         <h2 class="section__title a-mask">Album Ảnh</h2>
         <p class="section__sub a-up">The beginning of forever starts here.</p>
-        <div class="gallery__grid">
-          <figure class="g g--1 a-fade"><figcaption>Đà Lạt</figcaption></figure>
-          <figure class="g g--2 a-fade"><figcaption>Hội An</figcaption></figure>
-          <figure class="g g--3 a-fade"><figcaption>Sa Pa</figcaption></figure>
-          <figure class="g g--4 a-fade"><figcaption>Hà Nội</figcaption></figure>
-          <figure class="g g--5 a-fade"><figcaption>Phú Quốc</figcaption></figure>
-          <figure class="g g--6 a-fade"><figcaption>Ninh Bình</figcaption></figure>
+        <!-- Album dạng slider ngang (tự viết, script.js): mobile 1 ảnh, từ 768px trở lên 3 ảnh.
+             Thêm/đổi ảnh: sửa --img; ảnh chưa có thì hiện màu gradient tạm (--ph) -->
+        <div class="album a-fade">
+          <div class="album__viewport">
+            <div class="album__track">
+              <figure class="album__slide g" style="--img: url('images/codau_chure.webp'); --pos: 50% 62%; --ph: var(--photo-1)"></figure>
+              <figure class="album__slide g" style="--img: url('images/codau.webp'); --pos: 50% 34%; --ph: var(--photo-2)"></figure>
+              <figure class="album__slide g" style="--img: url('images/chure.webp'); --pos: 50% 22%; --ph: var(--photo-3)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/04.webp'); --ph: var(--photo-4)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/05.webp'); --ph: var(--photo-5)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/06.webp'); --ph: var(--photo-6)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/07.webp'); --ph: var(--photo-1)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/08.webp'); --ph: var(--photo-2)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/09.webp'); --ph: var(--photo-3)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/10.webp'); --ph: var(--photo-4)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/11.webp'); --ph: var(--photo-5)"></figure>
+              <figure class="album__slide g" style="--img: url('images/album/12.webp'); --ph: var(--photo-6)"></figure>
+            </div>
+          </div>
+          <button class="album__nav album__nav--prev" type="button" aria-label="Ảnh trước">‹</button>
+          <button class="album__nav album__nav--next" type="button" aria-label="Ảnh sau">›</button>
+          <div class="album__dots" role="tablist" aria-label="Chọn ảnh"></div>
         </div>
       </div>
     </section>
@@ -266,39 +277,13 @@
       </div>
     </section>
 
-    <!-- 8. QR mừng cưới -->
-    <section id="gift" class="slide section gift" data-title="Mừng cưới">
-      <div class="slide__body">
-        <p class="eyebrow a-up">Hộp mừng cưới</p>
-        <h2 class="section__title a-mask">Gửi Quà Mừng</h2>
-        <p class="section__sub a-up">Sự hiện diện của bạn là món quà quý nhất. Nếu muốn gửi lời chúc phúc từ xa, bạn có thể quét mã bên dưới.</p>
-        <div class="gift__grid">
-          <article class="qr qr--groom a-pop">
-            <p class="qr__who">Chú rể</p>
-            <div class="qr__img"><img src="images/qr-chu-re.png" alt="Mã QR mừng cưới chú rể Văn Hiếu" /></div>
-            <p class="qr__name">Văn Hiếu</p>
-            <p class="qr__bank">Vietcombank</p>
-            <p class="qr__acc">0123 456 789</p>
-            <button class="chip" type="button" data-copy="0123456789">Sao chép STK</button>
-          </article>
-          <article class="qr qr--bride a-pop">
-            <p class="qr__who">Cô dâu</p>
-            <div class="qr__img"><img src="images/qr-co-dau.png" alt="Mã QR mừng cưới cô dâu Nguyễn Chi" /></div>
-            <p class="qr__name">Nguyễn Chi</p>
-            <p class="qr__bank">Techcombank</p>
-            <p class="qr__acc">9876 543 210</p>
-            <button class="chip" type="button" data-copy="9876543210">Sao chép STK</button>
-          </article>
-        </div>
-      </div>
-    </section>
 
-    <!-- 9. Lời cảm ơn -->
+    <!-- 8. Lời cảm ơn -->
     <footer id="thanks" class="slide thanks" data-title="Lời cảm ơn">
       <div class="slide__body">
         <p class="eyebrow a-up">Thank you</p>
         <h2 class="thanks__names a-mask">Hiếu &amp; Chi</h2>
-        <p class="thanks__text a-up">Cảm ơn bạn đã là một phần trong câu chuyện của chúng mình. Hẹn gặp bạn trong ngày vui!</p>
+        <p class="thanks__text a-up">Cảm ơn đã là một phần trong câu chuyện của chúng mình. Hẹn gặp trong ngày vui!</p>
         <p class="thanks__date a-up">29 · 11 · 2026</p>
       </div>
     </footer>

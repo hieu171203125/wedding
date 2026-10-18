@@ -656,12 +656,6 @@ body.fp {
   letter-spacing: 0.08em;
 }
 
-.hero__place {
-  font-family: var(--font-serif);
-  font-style: italic;
-  color: var(--muted);
-}
-
 /* Ca dao trầu cau ở trang đầu, mỗi câu một dòng */
 .hero__poem {
   margin-top: 14px;
@@ -1027,6 +1021,11 @@ body.fp {
   background: linear-gradient(150deg, var(--green-soft), var(--pink-soft));
 }
 
+/* Thẻ địa điểm bấm được để đổi bản đồ */
+.card[data-address] {
+  cursor: pointer;
+}
+
 .card.is-selected {
   border-color: var(--green-mid);
   box-shadow: 0 0 0 2px var(--green), 0 10px 26px rgba(42, 114, 56, 0.12);
@@ -1060,13 +1059,6 @@ body.fp {
 .card__time {
   font-weight: 500;
   color: var(--green-deep);
-}
-
-.card__lunar {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 15px;
-  color: var(--pink-deep);
 }
 
 .card__addr {
@@ -1117,20 +1109,78 @@ body.fp {
   background: var(--paper);
 }
 
-.gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: clamp(96px, 15vh, 220px);
-  gap: 8px;
+/* Album: slider ngang tự viết (script.js) — mobile 1 ảnh, từ 768px trở lên 3 ảnh */
+.album {
+  --per: 1;    /* số ảnh mỗi khung — script.js đọc biến này */
+  --gap: 12px;
+  position: relative;
   max-width: 1000px;
   margin: 0 auto;
+}
+
+.album__viewport {
+  overflow: hidden;
+  border-radius: 16px;
+  touch-action: pan-y; /* vuốt ngang cho slider, vuốt dọc vẫn chuyển section */
+  cursor: grab;
+}
+
+.album__viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.album__track {
+  display: flex;
+  gap: var(--gap);
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+
+.album__viewport.is-dragging .album__track {
+  transition: none;
+}
+
+.album__slide {
+  flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
+}
+
+.album__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.album__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pink);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.album__dot.is-active {
+  width: 22px;
+  opacity: 1;
+  background: var(--pink-deep);
 }
 
 .g {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  user-select: none;
   cursor: pointer;
+  /* ảnh thật (--img) phủ lên trên; chưa có file thì lộ màu gradient tạm (--ph) */
+  background:
+    var(--img, none) var(--pos, center) / cover no-repeat,
+    var(--ph, var(--photo-1));
+  box-shadow: 0 10px 26px rgba(42, 114, 56, 0.14);
 }
 
 .g::after {
@@ -1138,41 +1188,39 @@ body.fp {
   position: absolute;
   inset: 0;
   background: inherit;
-  transition:
-    scale 1.8s var(--ease-out) var(--d, 0s),
-    transform 0.6s ease;
+  transition: transform 0.6s ease;
 }
 
-.fp .g::after { scale: 1.12; }
-.fp .slide.active .g.in::after { scale: 1; }
-
 .g:hover::after {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
 .g:focus-visible {
   outline: 3px solid var(--pink);
-  outline-offset: 2px;
+  outline-offset: -3px;
 }
 
-.g figcaption {
+.album__nav {
   position: absolute;
-  z-index: 1;
-  left: 10px;
-  bottom: 6px;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 16px;
-  color: var(--white);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  top: calc(50% - 11px); /* giữa khung ảnh (trừ hàng chấm bên dưới) */
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  color: var(--pink-deep);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
 }
 
-.g--1 { grid-column: span 2; grid-row: span 2; background: var(--photo-1) center / cover; }
-.g--2 { background: var(--photo-2) center / cover; }
-.g--3 { background: var(--photo-3) center / cover; }
-.g--4 { background: var(--photo-4) center / cover; }
-.g--5 { background: var(--photo-5) center / cover; }
-.g--6 { background: var(--photo-6) center / cover; }
+.album__nav--prev { left: 10px; }
+.album__nav--next { right: 10px; }
 
 /* =========================================================
    7. Lời chúc
@@ -1312,100 +1360,7 @@ body.fp {
 }
 
 /* =========================================================
-   8. QR mừng cưới
-   ========================================================= */
-.gift {
-  background:
-    radial-gradient(circle at 100% 100%, rgba(237, 149, 193, 0.35), transparent 45%),
-    var(--paper);
-}
-
-.gift__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.qr {
-  padding: 14px 12px 16px;
-  border-radius: 22px;
-  background: var(--white);
-  box-shadow: 0 12px 30px rgba(42, 114, 56, 0.1);
-}
-
-.qr--groom { border-top: 4px solid var(--green); }
-.qr--bride { border-top: 4px solid var(--pink); }
-
-.qr__who {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--pink-deep);
-}
-
-.qr__img {
-  position: relative;
-  aspect-ratio: 1;
-  margin: 8px auto 10px;
-  padding: 8px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: var(--white);
-}
-
-.qr__img img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-/* Chưa có ảnh QR -> hiện khung giữ chỗ */
-.qr__img.is-missing img {
-  display: none;
-}
-
-.qr__img.is-missing {
-  display: grid;
-  place-items: center;
-  background:
-    repeating-conic-gradient(var(--green-soft) 0 25%, var(--white) 0 50%) 0 0 / 16px 16px;
-}
-
-.qr__img.is-missing::after {
-  content: "Thêm ảnh QR";
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--white);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.qr__name {
-  font-family: var(--font-script);
-  font-size: 28px;
-  line-height: 1.1;
-  color: var(--green-deep);
-}
-
-.qr__bank {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.qr__acc {
-  margin-bottom: 8px;
-  font-family: var(--font-serif);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-}
-
-/* =========================================================
-   9. Lời cảm ơn
+   8. Lời cảm ơn
    ========================================================= */
 .thanks {
   padding: 56px 24px;
@@ -1712,22 +1667,11 @@ body.fp {
   .card { padding: 22px; }
   .map { height: 300px; margin-top: 20px; }
 
-  .gallery__grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
-
-  .g--4 { grid-row: span 2; }
-  .g--6 { grid-column: span 2; }
-  .g figcaption { font-size: 20px; left: 14px; bottom: 10px; }
+  .album { --per: 3; --gap: 16px; }
 
   .wishes__layout { grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: start; }
   .form { padding: 26px; gap: 14px; }
   .wishes__list { max-height: 380px; }
-
-  .gift__grid { gap: 24px; }
-  .qr { padding: 22px 20px; }
-  .qr__name { font-size: 34px; }
 
   .dots { right: 20px; gap: 12px; }
   .dots__dot { width: 10px; height: 10px; }
@@ -1809,7 +1753,7 @@ body.fp {
     align-items: center;
     column-gap: 72px;
     max-width: 1080px;
-    text-align: left;
+    text-align: center;
   }
 
   .hero__photo {
@@ -1817,9 +1761,8 @@ body.fp {
     margin: 0;
   }
 
-  .hero__names { justify-content: flex-start; flex-direction: column; align-items: flex-start; }
-  .hero__amp { margin-left: 1.4em; }
-  .divider { margin-left: 0; }
+  /* Cột chữ trang đầu căn giữa: tên, dấu &, ngày, ca dao */
+  .hero__names { flex-direction: column; align-items: center; }
 
   .person__name { font-size: 52px; }
 

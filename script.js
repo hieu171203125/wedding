@@ -372,7 +372,7 @@
       hero.classList.add("active");
       activatedAt = performance.now();
       ready = true;
-      // Có #hash trên URL (vd. chia sẻ link #gift) -> nhảy tới đó
+      // Có #hash trên URL (vd. chia sẻ link #event) -> nhảy tới đó
       const fromHash = slides.findIndex((s) => `#${s.id}` === location.hash);
       if (fromHash > 0) setTimeout(() => goTo(fromHash), 900);
     }, 1200);
@@ -432,9 +432,6 @@
     const offset = (first + 6) % 7; // lịch bắt đầu từ thứ 2
     const total = new Date(y, m, 0).getDate();
     const weekdays = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-    const weekdayName = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"][
-      new Date(y, m - 1, d).getDay()
-    ];
 
     let cells = weekdays.map((w) => `<span class="calendar__wd">${w}</span>`).join("");
     cells += "<span></span>".repeat(offset);
@@ -449,9 +446,7 @@
     cal.innerHTML = `
       <p class="calendar__head">Tháng ${m} · ${y}</p>
       <div class="calendar__grid">${cells}</div>
-      <p class="calendar__note">${weekdayName}, ngày ${d} tháng ${m} năm ${y}${
-        countdown.dataset.lunar ? `<br />${countdown.dataset.lunar}` : ""
-      }</p>`;
+      ${countdown.dataset.lunar ? `<p class="calendar__note">${countdown.dataset.lunar}</p>` : ""}`;
   })();
 
   /* =========================================================
@@ -477,7 +472,10 @@
   eventCards.forEach((card) => {
     $("[data-dir]", card).href =
       `https://www.google.com/maps/dir/?api=1&destination=${enc(card.dataset.address)}`;
-    $("[data-map]", card).addEventListener("click", () => showMap(card, true));
+    // Bấm vào bất kỳ đâu trên thẻ (trừ nút "Chỉ đường") cũng đổi bản đồ sang địa điểm đó
+    card.addEventListener("click", (e) => {
+      if (!e.target.closest("[data-dir]")) showMap(card, true);
+    });
   });
   showMap(selectedCard, false);
 
@@ -540,14 +538,124 @@
      Lightbox album
      ========================================================= */
   const frame = $(".lightbox__frame", lightbox);
-  const photos = $$(".gallery__grid .g");
+  const photos = $$(".album .g");
   let photoIndex = 0;
+
+  /* ----- Album: slider ngang tự viết (mobile 1 ảnh, ≥768px 3 ảnh — đặt bằng --per trong CSS) ----- */
+  let albumDragged = false; // vừa kéo slider -> không mở lightbox
+  (() => {
+    const album = $(".album");
+    if (!album) return;
+    const viewport = $(".album__viewport", album);
+    const track = $(".album__track", album);
+    const dotsWrap = $(".album__dots", album);
+    let index = 0;
+
+    const perView = () => parseInt(getComputedStyle(album).getPropertyValue("--per"), 10) || 1;
+    const gap = () => parseFloat(getComputedStyle(track).columnGap) || 0;
+    const step = () => photos[0].offsetWidth + gap(); // khoảng cách giữa 2 ảnh liền nhau
+    const maxIndex = () => Math.max(0, photos.length - perView());
+    // section có thể đang được thu nhỏ (--fit) -> đổi px trên màn hình sang px bố cục
+    const screenScale = () => viewport.getBoundingClientRect().width / viewport.offsetWidth || 1;
+
+    function setX(x) {
+      track.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+
+    function renderDots() {
+      const count = maxIndex() + 1;
+      if (dotsWrap.children.length === count) return;
+      dotsWrap.replaceChildren(
+        ...Array.from({ length: count }, (_, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "album__dot";
+          b.setAttribute("aria-label", `Ảnh ${i + 1}`);
+          b.addEventListener("click", () => go(i));
+          return b;
+        })
+      );
+    }
+
+    function go(i) {
+      const max = maxIndex();
+      // tua vòng: qua ảnh cuối thì về đầu và ngược lại
+      index = i > max ? 0 : i < 0 ? max : i;
+      setX(-index * step());
+      [...dotsWrap.children].forEach((d, k) => d.classList.toggle("is-active", k === index));
+    }
+
+    $(".album__nav--prev", album).addEventListener("click", () => go(index - 1));
+    $(".album__nav--next", album).addEventListener("click", () => go(index + 1));
+
+    // Kéo bằng chuột / ngón tay
+    let drag = null;
+    viewport.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      drag = { x: e.clientX, y: e.clientY, dx: 0, scale: screenScale(), base: -index * step() };
+      albumDragged = false;
+    });
+    viewport.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = (e.clientX - drag.x) / drag.scale;
+      if (!albumDragged) {
+        if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(e.clientY - drag.y)) return;
+        albumDragged = true;
+        viewport.classList.add("is-dragging");
+        viewport.setPointerCapture(e.pointerId);
+      }
+      drag.dx = dx;
+      // ra ngoài 2 đầu thì kéo nặng tay hơn
+      const x = drag.base + dx;
+      const min = -maxIndex() * step();
+      setX(x > 0 ? x / 3 : x < min ? min + (x - min) / 3 : x);
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      const { dx } = drag;
+      drag = null;
+      viewport.classList.remove("is-dragging");
+      if (!albumDragged) return;
+      const moved = Math.round(-dx / step());
+      const target = moved !== 0 ? index + moved : Math.abs(dx) > 40 ? index + (dx < 0 ? 1 : -1) : index;
+      go(Math.max(0, Math.min(maxIndex(), target))); // kéo quá đầu/cuối thì bật lại, không tua vòng
+    };
+    viewport.addEventListener("pointerup", endDrag);
+    viewport.addEventListener("pointercancel", endDrag);
+
+    // Vuốt ngang trên trackpad: mỗi lần vuốt sang 1 ảnh
+    let wheelLock = 0;
+    viewport.addEventListener(
+      "wheel",
+      (e) => {
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 8) return;
+        e.preventDefault();
+        const now = performance.now();
+        if (now < wheelLock) return;
+        wheelLock = now + 500;
+        go(index + (e.deltaX > 0 ? 1 : -1));
+      },
+      { passive: false }
+    );
+
+    // Đổi kích thước (vd. xoay ngang điện thoại): số ảnh mỗi khung có thể đổi
+    window.addEventListener("resize", () => {
+      renderDots();
+      go(Math.min(index, maxIndex()));
+    });
+
+    renderDots();
+    go(0);
+  })();
 
   function showPhoto(i) {
     photoIndex = (i + photos.length) % photos.length;
     const src = photos[photoIndex];
-    frame.style.background = `${getComputedStyle(src).backgroundImage} center / cover`;
-    $("figcaption", frame).textContent = $("figcaption", src).textContent;
+    frame.style.backgroundImage = getComputedStyle(src).backgroundImage;
+    frame.style.backgroundPosition = getComputedStyle(src).backgroundPosition;
+    frame.style.backgroundSize = "cover";
+    frame.style.backgroundRepeat = "no-repeat";
+    $("figcaption", frame).textContent = $("figcaption", src)?.textContent || "";
   }
 
   function openLightbox(i) {
@@ -564,8 +672,11 @@
   photos.forEach((ph, i) => {
     ph.tabIndex = 0;
     ph.setAttribute("role", "button");
-    ph.setAttribute("aria-label", `Xem ảnh ${$("figcaption", ph).textContent}`);
-    ph.addEventListener("click", () => openLightbox(i));
+    ph.setAttribute("aria-label", `Xem ảnh ${i + 1}`);
+    ph.addEventListener("click", () => {
+      if (albumDragged) return; // vừa kéo slider, không phải bấm xem ảnh
+      openLightbox(i);
+    });
     ph.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -683,26 +794,6 @@
   });
 
   renderWishes();
-
-  /* =========================================================
-     QR mừng cưới
-     ========================================================= */
-  $$(".qr__img img").forEach((img) => {
-    const markMissing = () => img.parentElement.classList.add("is-missing");
-    if (img.complete && img.naturalWidth === 0) markMissing();
-    else img.addEventListener("error", markMissing);
-  });
-
-  $$("[data-copy]").forEach((btn) =>
-    btn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(btn.dataset.copy);
-        showToast("Đã sao chép số tài khoản ✓");
-      } catch {
-        showToast(`STK: ${btn.dataset.copy}`);
-      }
-    })
-  );
 
   /* =========================================================
      Toast
