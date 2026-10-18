@@ -387,7 +387,7 @@
 
   musicBtn.addEventListener("click", () => {
     if (music.error) {
-      showToast("Chưa có file nhạc music.mp3");
+      showToast("Chưa có file nhạc mp3.mp3");
       return;
     }
     if (music.paused) {
