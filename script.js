@@ -830,6 +830,39 @@
   let wishToastTicks = 0;
   let wishToastHide = 0;
 
+  // Thứ tự hiện toast: trộn ngẫu nhiên mỗi lần vào web, hết vòng thì trộn lại
+  const wishKey = (w) => `${w.at}|${w.name}|${w.message}`;
+  const shuffle = (arr) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+  let wishQueue = [];
+  let lastWishKey = "";
+  const seenWishKeys = new Set();
+
+  function nextWish(list) {
+    // Lời chúc mới (chưa thấy trong lần xem này, vd. ai đó vừa gửi) được ưu tiên hiện sớm
+    const fresh = list.filter((w) => !seenWishKeys.has(wishKey(w)));
+    if (seenWishKeys.size) wishQueue.unshift(...fresh);
+    fresh.forEach((w) => seenWishKeys.add(wishKey(w)));
+
+    // Bỏ lời chúc đã bị xoá khỏi Sheet
+    const alive = new Set(list.map(wishKey));
+    wishQueue = wishQueue.filter((w) => alive.has(wishKey(w)));
+
+    if (!wishQueue.length) {
+      wishQueue = shuffle(list.slice());
+      // vòng mới không mở đầu bằng đúng lời chúc vừa hiện
+      if (wishQueue.length > 1 && wishKey(wishQueue[0]) === lastWishKey) wishQueue.push(wishQueue.shift());
+    }
+    const w = wishQueue.shift();
+    lastWishKey = wishKey(w);
+    return w;
+  }
+
   function showWishToast() {
     const list = loadWishes();
     // Không làm phiền khi khách đang điền form / xem ảnh / đang ở trang Lời chúc
@@ -837,8 +870,8 @@
       document.hidden || rsvpModal.open || !lightbox.hidden || slides[current].id === "wishes";
     if (!list.length || busy) return;
 
-    // Xoay vòng từ lời chúc mới nhất trở về trước
-    const w = list[list.length - 1 - (wishToastIndex++ % list.length)];
+    const w = nextWish(list);
+    wishToastIndex++;
     const msg = w.message.length > 70 ? `${w.message.slice(0, 70).trim()}…` : w.message;
 
     const icon = document.createElement("span");
