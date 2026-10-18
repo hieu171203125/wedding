@@ -1331,6 +1331,7 @@ body.fp {
   background: var(--white);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
   text-align: center;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -1426,12 +1427,22 @@ body.fp {
 
 /* 2 lựa chọn Có / Không dạng nút to, dễ chạm */
 .rsvp__choice label {
+  position: relative;
   display: block;
   cursor: pointer;
 }
 
+/* Nút radio thật được ẩn (dùng span làm nút). Phải ghi đè width:100% của .form input,
+   nếu không radio ẩn rộng bằng cả form, tràn ra ngoài làm modal cuộn ngang được */
 .rsvp__choice input {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -1759,6 +1770,60 @@ body.fp {
 
 .lightbox__nav--prev { left: calc(50% - 60px); }
 .lightbox__nav--next { right: calc(50% - 60px); }
+
+/* Toast lời chúc: góc trái dưới, ngay trên nút "Xác nhận tham dự" */
+.wish-toast {
+  position: fixed;
+  left: 14px;
+  bottom: calc(max(14px, env(safe-area-inset-bottom)) + 58px);
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: max-content;
+  max-width: min(320px, calc(100vw - 80px));
+  padding: 10px 14px 10px 10px;
+  border: 1.5px solid var(--pink);
+  border-radius: 18px 18px 18px 6px; /* dáng bong bóng chat */
+  background: var(--white);
+  box-shadow: 0 10px 26px rgba(194, 77, 136, 0.22);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateX(-24px) scale(0.96);
+  transform-origin: left bottom;
+  transition: opacity 0.35s ease, transform 0.45s var(--ease-out);
+  pointer-events: none;
+}
+
+.wish-toast.is-shown {
+  opacity: 1;
+  transform: none;
+}
+
+.wish-toast__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  font-size: 18px;
+}
+
+.wish-toast__text strong {
+  color: var(--pink-deep);
+}
+
+.wish-toast__text em {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--muted);
+}
 
 .toast {
   position: fixed;

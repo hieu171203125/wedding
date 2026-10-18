@@ -817,6 +817,57 @@
   // Lấy lời chúc của mọi khách khi tới section Lời chúc (và mỗi lần quay lại)
   $("#wishes").addEventListener("slide:enter", fetchWishes);
 
+  /* ----- Toast lời chúc: cứ 15s hiện "Bạn A đã gửi lời chúc" ở góc màn hình ----- */
+  const WISH_TOAST_EVERY = 15000; // ms giữa 2 lần hiện
+  const WISH_TOAST_SHOW = 5000; // ms mỗi toast hiện trên màn hình
+  const wishToast = document.createElement("div");
+  wishToast.className = "wish-toast";
+  wishToast.setAttribute("role", "status");
+  wishToast.setAttribute("aria-live", "polite");
+  body.append(wishToast);
+
+  let wishToastIndex = 0;
+  let wishToastTicks = 0;
+  let wishToastHide = 0;
+
+  function showWishToast() {
+    const list = loadWishes();
+    // Không làm phiền khi khách đang điền form / xem ảnh / đang ở trang Lời chúc
+    const busy =
+      document.hidden || rsvpModal.open || !lightbox.hidden || slides[current].id === "wishes";
+    if (!list.length || busy) return;
+
+    // Xoay vòng từ lời chúc mới nhất trở về trước
+    const w = list[list.length - 1 - (wishToastIndex++ % list.length)];
+    const msg = w.message.length > 70 ? `${w.message.slice(0, 70).trim()}…` : w.message;
+
+    const icon = document.createElement("span");
+    icon.className = "wish-toast__icon";
+    icon.textContent = ["💌", "🐱", "🌸", "🍀"][wishToastIndex % 4];
+    const text = document.createElement("span");
+    text.className = "wish-toast__text";
+    const who = document.createElement("strong");
+    who.textContent = w.name; // textContent: tên/lời chúc của khách không chèn được HTML
+    const quote = document.createElement("em");
+    quote.textContent = `“${msg}”`;
+    text.append(who, " đã gửi lời chúc", quote);
+    wishToast.replaceChildren(icon, text);
+
+    wishToast.classList.add("is-shown");
+    clearTimeout(wishToastHide);
+    wishToastHide = setTimeout(() => wishToast.classList.remove("is-shown"), WISH_TOAST_SHOW);
+  }
+
+  // Bắt đầu sau khi khách mở thiệp: tải lời chúc, toast đầu tiên sau ~6s
+  toggle.addEventListener("change", () => {
+    fetchWishes();
+    setTimeout(showWishToast, 6000);
+    setInterval(() => {
+      if (++wishToastTicks % 4 === 0) fetchWishes(); // ~mỗi phút lấy lời chúc mới
+      showWishToast();
+    }, WISH_TOAST_EVERY);
+  });
+
   /* =========================================================
      Xác nhận tham dự (RSVP, dạng modal) -> Google Sheet, tab "Xác nhận tham dự"
      ========================================================= */
