@@ -192,7 +192,6 @@
     "wheel",
     (e) => {
       if (navBlocked()) return;
-      if (e.target.closest && e.target.closest(".map")) return;
 
       const now = performance.now();
       if (now - lastWheelAt > GESTURE_GAP) gestureSpent = false; // gesture mới
@@ -235,7 +234,6 @@
         y: t.clientY,
         canDown: canScrollWithin(e.target, 1),
         canUp: canScrollWithin(e.target, -1),
-        inMap: !!e.target.closest(".map"),
       };
     },
     { passive: true }
@@ -244,7 +242,7 @@
   window.addEventListener(
     "touchmove",
     (e) => {
-      if (!touch || touch.inMap) return;
+      if (!touch) return;
       const dy = touch.y - e.touches[0].clientY;
       const canNative = dy > 0 ? touch.canDown : touch.canUp;
       if (!canNative && e.cancelable) e.preventDefault(); // chặn bounce / pull-to-refresh
@@ -256,7 +254,6 @@
     if (!touch) return;
     const start = touch;
     touch = null;
-    if (start.inMap) return;
     const t = e.changedTouches[0];
     const dy = start.y - t.clientY;
     const dx = start.x - t.clientX;
@@ -450,38 +447,16 @@
   })();
 
   /* =========================================================
-     Google Maps
+     Google Maps: mỗi thẻ nhà trai / nhà gái là 1 nút mở chỉ đường
      ========================================================= */
-  const mapFrame = $("#map");
-  const mapLabel = $("#map-label");
-  const eventCards = $$(".card[data-address]");
-  const enc = encodeURIComponent;
-  let selectedCard = eventCards.find((c) => c.classList.contains("card--featured")) || eventCards[0];
-  let mapLoaded = false;
-
-  function showMap(card, load = mapLoaded) {
-    selectedCard = card;
-    eventCards.forEach((c) => c.classList.toggle("is-selected", c === card));
-    mapLabel.textContent = `📍 ${$("h3", card).textContent} — ${card.dataset.address}`;
-    if (load) {
-      mapFrame.src = `https://www.google.com/maps?q=${enc(card.dataset.address)}&output=embed`;
-      mapLoaded = true;
-    }
-  }
-
-  eventCards.forEach((card) => {
-    $("[data-dir]", card).href =
-      `https://www.google.com/maps/dir/?api=1&destination=${enc(card.dataset.address)}`;
-    // Bấm vào bất kỳ đâu trên thẻ (trừ nút "Chỉ đường") cũng đổi bản đồ sang địa điểm đó
+  $$(".card[data-address]").forEach((card) => {
+    const link = $("[data-dir]", card);
+    link.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(card.dataset.address)}`;
+    link.setAttribute("aria-label", `Chỉ đường tới ${$("h3", card).textContent} trên Google Maps`);
+    // Bấm vào bất kỳ đâu trên thẻ cũng mở Google Maps (điện thoại sẽ mở app Maps)
     card.addEventListener("click", (e) => {
-      if (!e.target.closest("[data-dir]")) showMap(card, true);
+      if (!e.target.closest("[data-dir]")) link.click();
     });
-  });
-  showMap(selectedCard, false);
-
-  // Chỉ tải bản đồ khi khách thực sự tới section này
-  $("#event").addEventListener("slide:enter", () => {
-    if (!mapLoaded) showMap(selectedCard, true);
   });
 
   /* =========================================================

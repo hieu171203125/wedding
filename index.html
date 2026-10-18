@@ -23,16 +23,16 @@
         <span class="intro__door intro__door--right"></span>
         <img src="images/lotus-left.png" alt="" class="intro__lotus intro__lotus--left" />
         <img src="images/lotus-right.png" alt="" class="intro__lotus intro__lotus--right" />
-        <!-- Tên khách mời từ link ?to=... (script.js điền vào) -->
-        <span class="intro__guest" data-guest hidden>
-          <span class="intro__guest-label">Trân trọng kính mời</span>
-          <span class="intro__guest-name" data-guest-name></span>
-        </span>
       </span>
       <!-- Như 13-9: chữ Hỷ gắn vào cánh trái, nằm đè lên mép giữa, mở ra thì đi cùng cánh trái -->
       <label for="open-card" class="intro__seal" title="Chạm chữ Hỷ để mở thiệp">
         <img src="images/hy.png" alt="Chữ Hỷ" class="intro__hi" />
       </label>
+      <!-- Tên khách mời từ link ?to=... (script.js điền vào); gắn cánh trái giống chữ Hỷ -->
+      <span class="intro__guest" data-guest hidden>
+        <span class="intro__guest-label">Trân trọng kính mời</span>
+        <span class="intro__guest-name" data-guest-name></span>
+      </span>
     </span>
     <span class="intro__half intro__half--right" aria-hidden="true">
       <span class="intro__inner">
@@ -40,11 +40,6 @@
         <span class="intro__door intro__door--right"></span>
         <img src="images/lotus-left.png" alt="" class="intro__lotus intro__lotus--left" />
         <img src="images/lotus-right.png" alt="" class="intro__lotus intro__lotus--right" />
-        <!-- Tên khách mời từ link ?to=... (script.js điền vào) -->
-        <span class="intro__guest" data-guest hidden>
-          <span class="intro__guest-label">Trân trọng kính mời</span>
-          <span class="intro__guest-name" data-guest-name></span>
-        </span>
       </span>
     </span>
   </div>
@@ -179,8 +174,7 @@
             <p class="card__addr">Tư gia nhà trai · 13 Hoàng Bùi Hoàn, thôn Phú Thọ, xã Lưu Vệ, tỉnh Thanh Hóa</p>
             <p class="card__host">Ông Nguyễn Văn Hồng · Bà Bùi Thị Hồng</p>
             <div class="card__actions">
-              <button class="chip" type="button" data-map>Xem bản đồ</button>
-              <a class="chip chip--solid" data-dir target="_blank" rel="noopener">Chỉ đường</a>
+              <a class="chip chip--solid" data-dir target="_blank" rel="noopener">Chỉ đường ↗</a>
             </div>
           </article>
           <article class="card a-up" data-address="Thôn Nhật Tân, Phường Trà Lý, Hưng Yên">
@@ -190,15 +184,10 @@
             <p class="card__addr">Tư gia nhà gái · Thôn Nhật Tân, phường Trà Lý, tỉnh Hưng Yên</p>
             <p class="card__host">Ông Nguyễn Quang Dự · Bà Vũ Thị Lanh</p>
             <div class="card__actions">
-              <button class="chip" type="button" data-map>Xem bản đồ</button>
-              <a class="chip chip--solid" data-dir target="_blank" rel="noopener">Chỉ đường</a>
+              <a class="chip chip--solid" data-dir target="_blank" rel="noopener">Chỉ đường ↗</a>
             </div>
           </article>
         </div>
-        <div class="map a-zoom">
-          <iframe id="map" title="Bản đồ địa điểm" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <p class="map__label a-up" id="map-label"></p>
       </div>
     </section>
 
