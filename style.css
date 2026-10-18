@@ -483,9 +483,9 @@ body.fp {
 }
 
 .eyebrow {
-  font-size: 13px;
+  font-size: clamp(16px, 4.6vw, 32px); /* điện thoại co theo màn hình để không vỡ dòng */
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--pink-deep);
   margin-bottom: 6px;
@@ -1912,7 +1912,7 @@ body.fp {
 
   .section { padding: 72px 48px; }
 
-  .eyebrow { font-size: 14px; }
+  .eyebrow { font-size: 32px; }
 
   .couple__grid { gap: 32px; }
   .couple__heart { font-size: 40px; }
