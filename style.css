@@ -1277,6 +1277,104 @@ body.fp {
   box-shadow: 0 0 0 3px rgba(134, 235, 140, 0.35);
 }
 
+/* ---------- Xác nhận tham dự ---------- */
+.rsvp-sec {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(237, 149, 193, 0.28), transparent 42%),
+    var(--paper);
+}
+
+.rsvp,
+.rsvp__done {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.rsvp__choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.rsvp__choice legend {
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 2 lựa chọn Có / Không dạng nút to, dễ chạm */
+.rsvp__choice label {
+  display: block;
+  cursor: pointer;
+}
+
+.rsvp__choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rsvp__choice span {
+  display: block;
+  padding: 12px 10px;
+  border: 1px solid #d5e6d8;
+  border-radius: 12px;
+  background: var(--paper);
+  text-align: center;
+  font-size: 15px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.rsvp__choice input:checked + span {
+  border-color: var(--green-mid);
+  background: var(--green-soft);
+  color: var(--green-deep);
+  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--green);
+}
+
+.rsvp__choice input[value="no"]:checked + span {
+  border-color: var(--pink);
+  background: var(--pink-soft);
+  color: var(--pink-deep);
+  box-shadow: 0 0 0 2px var(--pink);
+}
+
+.rsvp__choice input:focus-visible + span {
+  outline: 2px solid var(--green-mid);
+  outline-offset: 2px;
+}
+
+.form [data-if-attend][hidden] {
+  display: none;
+}
+
+.rsvp__done {
+  padding: 28px 22px;
+  border-radius: 22px;
+  background: var(--white);
+  box-shadow: 0 12px 30px rgba(42, 114, 56, 0.1);
+}
+
+.rsvp__done[hidden] {
+  display: none;
+}
+
+.rsvp__done-icon {
+  font-size: 40px;
+}
+
+.rsvp__done-text {
+  margin: 8px 0 16px;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--green-deep);
+}
+
 .wishes {
   text-align: left;
 }

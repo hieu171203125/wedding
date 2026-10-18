@@ -781,22 +781,13 @@
     const message = data.message.trim();
     if (!name || !message) return;
 
-    const wish = {
-      name,
-      attend: data.attend,
-      guests: Number(data.guests) || 1,
-      message,
-      at: new Date().toISOString(),
-    };
+    // Tham dự / số người giờ nằm ở form "Xác nhận tham dự" riêng
+    const wish = { name, message, at: new Date().toISOString() };
 
     const done = () => {
       wishesList.scrollTop = 0;
       form.reset();
-      showToast(
-        data.attend === "yes"
-          ? `Cảm ơn ${name}! Hẹn gặp bạn trong ngày vui ♥`
-          : `Cảm ơn ${name} đã gửi lời chúc ♥`
-      );
+      showToast(`Cảm ơn ${name} đã gửi lời chúc ♥`);
       burstPetals(24);
     };
 
@@ -826,6 +817,80 @@
 
   // Lấy lời chúc của mọi khách khi tới section Lời chúc (và mỗi lần quay lại)
   $("#wishes").addEventListener("slide:enter", fetchWishes);
+
+  /* =========================================================
+     Xác nhận tham dự (RSVP) -> Google Sheet, tab "Xác nhận tham dự"
+     ========================================================= */
+  const rsvpForm = $("#rsvp-form");
+  const rsvpDone = $("#rsvp-done");
+  const RSVP_KEY = "wedding-hieu-chi-rsvp";
+  const SIDE_LABEL = { trai: "Lễ Thành Hôn", gai: "Lễ Vu Quy", "ca-hai": "cả hai lễ" };
+  if (guest) rsvpForm.elements.namedItem("name").defaultValue = guest;
+
+  // Chọn "Không thể" thì ẩn ô Dự lễ / Số người
+  const attendRow = $("[data-if-attend]", rsvpForm);
+  const syncAttend = () => (attendRow.hidden = rsvpForm.elements.namedItem("attend").value !== "yes");
+  rsvpForm.addEventListener("change", syncAttend);
+
+  function showRsvpDone(r) {
+    $("#rsvp-done-text").textContent =
+      r.attend === "yes"
+        ? `Cảm ơn ${r.name}! Hẹn gặp ${r.guests > 1 ? `${r.guests} người` : "bạn"} tại ${SIDE_LABEL[r.side]} ♥`
+        : `Cảm ơn ${r.name} đã báo cho chúng mình. Rất tiếc vì bạn không đến được ♥`;
+    rsvpForm.hidden = true;
+    rsvpDone.hidden = false;
+  }
+
+  // Khách đã xác nhận trên máy này -> hiện lời cảm ơn, có nút sửa lại
+  try {
+    const saved = JSON.parse(localStorage.getItem(RSVP_KEY));
+    if (saved) showRsvpDone(saved);
+  } catch {
+    /* bỏ qua */
+  }
+
+  $("#rsvp-again").addEventListener("click", () => {
+    rsvpDone.hidden = true;
+    rsvpForm.hidden = false;
+  });
+
+  rsvpForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(rsvpForm));
+    const r = {
+      type: "rsvp",
+      name: data.name.trim(),
+      attend: data.attend,
+      side: data.attend === "yes" ? data.side : "",
+      guests: data.attend === "yes" ? Number(data.guests) || 1 : 0,
+      note: (data.note || "").trim(),
+      invited: guest,
+    };
+    if (!r.name) return;
+
+    const finish = () => {
+      try {
+        localStorage.setItem(RSVP_KEY, JSON.stringify(r));
+      } catch {
+        /* bỏ qua */
+      }
+      showRsvpDone(r);
+      if (r.attend === "yes") burstPetals(30);
+    };
+
+    if (!WISHES_API) return finish();
+
+    const btn = rsvpForm.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    fetch(WISHES_API, { method: "POST", body: JSON.stringify(r) })
+      .then((res) => res.json())
+      .then((d) => {
+        if (!d.ok) throw new Error(d.error);
+        finish();
+      })
+      .catch(() => showToast("Chưa gửi được xác nhận, bạn thử lại giúp mình nhé"))
+      .finally(() => (btn.disabled = false));
+  });
 
   renderWishes();
 
