@@ -51,7 +51,7 @@
       <a href="#couple">Cô dâu chú rể</a>
       <a href="#story">Chuyện tình</a>
       <a href="#event">Lễ cưới</a>
-      <a href="#rsvp">Xác nhận</a>
+      <a href="#rsvp" data-rsvp-open>Xác nhận</a>
       <a href="#gallery">Album</a>
       <a href="#wishes">Lời chúc</a>
     </nav>
@@ -190,56 +190,11 @@
             </div>
           </article>
         </div>
+        <button type="button" class="btn event__rsvp a-up" data-rsvp-open>💌 Xác nhận tham dự</button>
       </div>
     </section>
 
     <!-- 6. Album -->
-    <!-- Xác nhận tham dự (lưu vào Google Sheet, tab "Xác nhận tham dự") -->
-    <section id="rsvp" class="slide section rsvp-sec" data-title="Xác nhận tham dự">
-      <div class="slide__body">
-        <p class="eyebrow a-up">RSVP</p>
-        <h2 class="section__title a-mask">Xác Nhận Tham Dự</h2>
-        <p class="section__sub a-up">Bạn xác nhận giúp chúng mình để gia đình chuẩn bị chu đáo nhé.</p>
-        <form class="form rsvp a-up" id="rsvp-form">
-          <label>
-            Tên của bạn
-            <input type="text" name="name" placeholder="Nguyễn Văn A" required maxlength="60" />
-          </label>
-          <fieldset class="rsvp__choice">
-            <legend>Bạn sẽ tham dự chứ?</legend>
-            <label><input type="radio" name="attend" value="yes" checked /><span>Có, mình sẽ đến</span></label>
-            <label><input type="radio" name="attend" value="no" /><span>Rất tiếc, không thể</span></label>
-          </fieldset>
-          <div class="form__row" data-if-attend>
-            <label>
-              Dự lễ
-              <select name="side">
-                <option value="trai">Lễ Thành Hôn (nhà trai)</option>
-                <option value="gai">Lễ Vu Quy (nhà gái)</option>
-                <option value="ca-hai">Cả hai</option>
-              </select>
-            </label>
-            <label>
-              Số người
-              <select name="guests">
-                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-              </select>
-            </label>
-          </div>
-          <label>
-            Lời nhắn (không bắt buộc)
-            <textarea name="note" rows="2" placeholder="Ví dụ: mình đi cùng gia đình, có 1 bé nhỏ..." maxlength="300"></textarea>
-          </label>
-          <button type="submit" class="btn">Gửi xác nhận</button>
-        </form>
-        <div class="rsvp__done a-up" id="rsvp-done" hidden>
-          <p class="rsvp__done-icon" aria-hidden="true">💌</p>
-          <p class="rsvp__done-text" id="rsvp-done-text"></p>
-          <button type="button" class="chip" id="rsvp-again">Sửa lại xác nhận</button>
-        </div>
-      </div>
-    </section>
-
     <section id="gallery" class="slide section gallery" data-title="Album ảnh">
       <div class="slide__body">
         <p class="eyebrow a-up">Khoảnh khắc</p>
@@ -318,6 +273,51 @@
   <button class="music-btn" id="music-btn" type="button" aria-label="Bật/tắt nhạc nền" hidden>♫</button>
 
   <div class="petals" id="petals" aria-hidden="true"></div>
+
+  <!-- Nút nổi mở form xác nhận tham dự (hiện sau khi mở thiệp) -->
+  <button type="button" class="rsvp-fab" id="rsvp-fab" data-rsvp-open hidden>💌 <span>Xác nhận tham dự</span></button>
+
+  <!-- Modal xác nhận tham dự (lưu vào Google Sheet, tab "Xác nhận tham dự") -->
+  <dialog class="rsvp-modal" id="rsvp-modal" aria-labelledby="rsvp-title">
+    <button type="button" class="rsvp-modal__close" id="rsvp-close" aria-label="Đóng">×</button>
+    <p class="eyebrow">RSVP</p>
+    <h2 class="rsvp-modal__title" id="rsvp-title" tabindex="-1" autofocus>Xác Nhận Tham Dự</h2>
+    <p class="rsvp-modal__sub">Bạn xác nhận giúp chúng mình để gia đình chuẩn bị chu đáo nhé.</p>
+    <form class="form rsvp" id="rsvp-form">
+      <label>
+        Tên của bạn
+        <input type="text" name="name" placeholder="Nguyễn Văn A" required maxlength="60" />
+      </label>
+      <fieldset class="rsvp__choice">
+        <legend>Bạn sẽ tham dự chứ?</legend>
+        <label><input type="radio" name="attend" value="yes" checked /><span>Có, mình sẽ đến</span></label>
+        <label><input type="radio" name="attend" value="no" /><span>Rất tiếc, không thể</span></label>
+      </fieldset>
+      <div class="form__row" data-if-attend>
+        <label>
+          Dự lễ
+          <select name="side">
+            <option value="trai">Lễ Thành Hôn (nhà trai)</option>
+            <option value="gai">Lễ Vu Quy (nhà gái)</option>
+            <option value="ca-hai">Cả hai</option>
+          </select>
+        </label>
+        <label>
+          Số người
+          <select name="guests">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+          </select>
+        </label>
+      </div>
+      <p class="rsvp__error" id="rsvp-error" role="alert" hidden>Chưa gửi được xác nhận, bạn thử lại giúp mình nhé.</p>
+      <button type="submit" class="btn">Gửi xác nhận</button>
+    </form>
+    <div class="rsvp__done" id="rsvp-done" hidden>
+      <p class="rsvp__done-icon" aria-hidden="true">💌</p>
+      <p class="rsvp__done-text" id="rsvp-done-text"></p>
+      <button type="button" class="chip" id="rsvp-again">Sửa lại xác nhận</button>
+    </div>
+  </dialog>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Xem ảnh" hidden>
     <button class="lightbox__close" type="button" aria-label="Đóng">×</button>

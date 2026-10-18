@@ -1,6 +1,5 @@
 (() => {
   "use strict";
-  console.log('123')
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   // Luôn chạy hiệu ứng (như 13-9), kể cả khi máy bật "giảm chuyển động"
@@ -182,7 +181,7 @@
     return false;
   }
 
-  const navBlocked = () => !ready || !lightbox.hidden;
+  const navBlocked = () => !ready || !lightbox.hidden || $("#rsvp-modal").open;
 
   /* ----- Wheel / trackpad ----- */
   let lastWheelAt = 0;
@@ -819,10 +818,27 @@
   $("#wishes").addEventListener("slide:enter", fetchWishes);
 
   /* =========================================================
-     Xác nhận tham dự (RSVP) -> Google Sheet, tab "Xác nhận tham dự"
+     Xác nhận tham dự (RSVP, dạng modal) -> Google Sheet, tab "Xác nhận tham dự"
      ========================================================= */
+  const rsvpModal = $("#rsvp-modal");
+  const rsvpFab = $("#rsvp-fab");
   const rsvpForm = $("#rsvp-form");
   const rsvpDone = $("#rsvp-done");
+
+  // Mở modal: nút nổi, mục "Xác nhận" trên menu, nút dưới thẻ Lễ cưới
+  $$("[data-rsvp-open]").forEach((el) =>
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      rsvpModal.showModal();
+    })
+  );
+  $("#rsvp-close").addEventListener("click", () => rsvpModal.close());
+  // Bấm ra vùng tối bên ngoài thì đóng
+  rsvpModal.addEventListener("click", (e) => {
+    if (e.target === rsvpModal) rsvpModal.close();
+  });
+  // Nút nổi chỉ hiện sau khi khách đã mở thiệp
+  toggle.addEventListener("change", () => setTimeout(() => (rsvpFab.hidden = false), 1800));
   const RSVP_KEY = "wedding-hieu-chi-rsvp";
   const SIDE_LABEL = { trai: "Lễ Thành Hôn", gai: "Lễ Vu Quy", "ca-hai": "cả hai lễ" };
   if (guest) rsvpForm.elements.namedItem("name").defaultValue = guest;
@@ -839,6 +855,8 @@
         : `Cảm ơn ${r.name} đã báo cho chúng mình. Rất tiếc vì bạn không đến được ♥`;
     rsvpForm.hidden = true;
     rsvpDone.hidden = false;
+    rsvpFab.classList.add("is-done");
+    $("span", rsvpFab).textContent = "Đã xác nhận ✓";
   }
 
   // Khách đã xác nhận trên máy này -> hiện lời cảm ơn, có nút sửa lại
@@ -863,7 +881,6 @@
       attend: data.attend,
       side: data.attend === "yes" ? data.side : "",
       guests: data.attend === "yes" ? Number(data.guests) || 1 : 0,
-      note: (data.note || "").trim(),
       invited: guest,
     };
     if (!r.name) return;
@@ -881,15 +898,22 @@
     if (!WISHES_API) return finish();
 
     const btn = rsvpForm.querySelector('button[type="submit"]');
+    const error = $("#rsvp-error");
     btn.disabled = true;
+    btn.textContent = "Đang gửi...";
+    error.hidden = true;
     fetch(WISHES_API, { method: "POST", body: JSON.stringify(r) })
       .then((res) => res.json())
       .then((d) => {
         if (!d.ok) throw new Error(d.error);
         finish();
       })
-      .catch(() => showToast("Chưa gửi được xác nhận, bạn thử lại giúp mình nhé"))
-      .finally(() => (btn.disabled = false));
+      // báo lỗi ngay trong modal (toast nằm phía sau modal nên khách không thấy)
+      .catch(() => (error.hidden = false))
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = "Gửi xác nhận";
+      });
   });
 
   renderWishes();
