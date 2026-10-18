@@ -104,8 +104,8 @@ body:has(.intro__toggle:not(:checked)) {
   width: 50%;
   height: 100%;
   transition:
-    transform 2.6s cubic-bezier(0.45, 0, 0.2, 1),
-    box-shadow 2.6s ease;
+    transform 1.6s cubic-bezier(0.65, 0, 0.35, 1),
+    box-shadow 1.6s ease;
   will-change: transform;
 }
 
@@ -207,11 +207,11 @@ body:has(.intro__toggle:not(:checked)) {
   border: 3px solid #fff;
 }
 
-/* Hai cánh cửa (kèm hai nửa chữ Hỷ) từ từ trượt sang hai bên */
+/* Hai cánh cửa trượt sang hai bên (chữ Hỷ + biển tên đi cùng cánh trái) */
 .intro__toggle:checked + .intro {
   pointer-events: none;
   /* Chỉ ẩn lớp thiệp sau khi hai cánh đã trượt ra ngoài */
-  animation: hideIntro 0s 2.7s forwards;
+  animation: hideIntro 0s 1.7s forwards;
 }
 
 .intro__toggle:checked + .intro .intro__half--left {
@@ -222,6 +222,14 @@ body:has(.intro__toggle:not(:checked)) {
 .intro__toggle:checked + .intro .intro__half--right {
   transform: translateX(100%);
   box-shadow: -20px 0 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Chữ Hỷ + biển tên thò ra ngoài mép cánh trái -> mờ dần trước khi cánh chạm mép màn hình,
+   tránh cảnh nửa vòng tròn còn dính ở mép trái */
+.intro__toggle:checked + .intro .intro__seal,
+.intro__toggle:checked + .intro .intro__guest {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.75s;
 }
 
 /* Tên khách mời (?to=...) ngay dưới chữ Hỷ; gắn ở mép phải cánh trái (như chữ Hỷ) nên mở ra đi cùng cánh trái */

@@ -372,7 +372,7 @@
       // Có #hash trên URL (vd. chia sẻ link #event) -> nhảy tới đó
       const fromHash = slides.findIndex((s) => `#${s.id}` === location.hash);
       if (fromHash > 0) setTimeout(() => goTo(fromHash), 900);
-    }, 1200);
+    }, 700);
   });
 
   /* =========================================================
@@ -552,12 +552,23 @@
       );
     }
 
-    function go(i) {
+    function go(i, auto = false) {
       const max = maxIndex();
       // tua vòng: qua ảnh cuối thì về đầu và ngược lại
       index = i > max ? 0 : i < 0 ? max : i;
       setX(-index * step());
       [...dotsWrap.children].forEach((d, k) => d.classList.toggle("is-active", k === index));
+      if (!auto) restartAuto(); // khách tự chuyển ảnh -> đếm lại 5s từ đầu
+    }
+
+    // Tự chuyển ảnh mỗi 5 giây (dừng khi đang kéo hoặc tab bị ẩn)
+    const AUTOPLAY_MS = 5000;
+    let autoTimer = 0;
+    function restartAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        if (!drag && !document.hidden) go(index + 1, true);
+      }, AUTOPLAY_MS);
     }
 
     $(".album__nav--prev", album).addEventListener("click", () => go(index - 1));
