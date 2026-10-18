@@ -709,12 +709,32 @@
   const STORAGE_KEY = "wedding-hieu-chi-wishes";
   const ATTEND_LABEL = { yes: "Sẽ tham dự", maybe: "Chưa chắc", no: "Không tham dự" };
 
+  // URL "Ứng dụng web" của Google Apps Script (xem apps-script/Code.gs).
+  // Để trống -> lời chúc chỉ lưu trên trình duyệt của khách như trước.
+  const WISHES_API = "";
+  let remoteWishes = null; // lời chúc của mọi khách, lấy từ Google Sheet
+
   function loadWishes() {
+    if (remoteWishes) return remoteWishes;
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch {
       return [];
     }
+  }
+
+  function fetchWishes() {
+    if (!WISHES_API) return;
+    fetch(WISHES_API)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.ok) return;
+        remoteWishes = d.wishes;
+        renderWishes();
+      })
+      .catch(() => {
+        /* mạng lỗi: vẫn hiện lời chúc lưu trên máy */
+      });
   }
 
   function saveWishes(list) {
@@ -760,26 +780,51 @@
     const message = data.message.trim();
     if (!name || !message) return;
 
-    const list = loadWishes();
-    list.push({
+    const wish = {
       name,
       attend: data.attend,
       guests: Number(data.guests) || 1,
       message,
       at: new Date().toISOString(),
-    });
-    saveWishes(list);
-    renderWishes();
-    wishesList.scrollTop = 0;
-    form.reset();
+    };
 
-    showToast(
-      data.attend === "yes"
-        ? `Cảm ơn ${name}! Hẹn gặp bạn trong ngày vui ♥`
-        : `Cảm ơn ${name} đã gửi lời chúc ♥`
-    );
-    burstPetals(24);
+    const done = () => {
+      wishesList.scrollTop = 0;
+      form.reset();
+      showToast(
+        data.attend === "yes"
+          ? `Cảm ơn ${name}! Hẹn gặp bạn trong ngày vui ♥`
+          : `Cảm ơn ${name} đã gửi lời chúc ♥`
+      );
+      burstPetals(24);
+    };
+
+    // Chưa nối Google Sheet: lưu trên trình duyệt như trước
+    if (!WISHES_API) {
+      saveWishes([...loadWishes(), wish]);
+      renderWishes();
+      done();
+      return;
+    }
+
+    // Gửi lên Google Sheet. Body là chuỗi (text/plain) để không bị chặn CORS preflight.
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    fetch(WISHES_API, { method: "POST", body: JSON.stringify({ ...wish, invited: guest }) })
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.ok) throw new Error(d.error);
+        remoteWishes = [...(remoteWishes || []), wish];
+        renderWishes();
+        done();
+        fetchWishes(); // lấy lại danh sách mới nhất (có cả lời chúc người khác vừa gửi)
+      })
+      .catch(() => showToast("Chưa gửi được lời chúc, bạn thử lại giúp mình nhé"))
+      .finally(() => (btn.disabled = false));
   });
+
+  // Lấy lời chúc của mọi khách khi tới section Lời chúc (và mỗi lần quay lại)
+  $("#wishes").addEventListener("slide:enter", fetchWishes);
 
   renderWishes();
 
