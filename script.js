@@ -843,6 +843,11 @@
   let lastWishKey = "";
   const seenWishKeys = new Set();
 
+  // Lời chúc không có ID trong Sheet -> nhận diện bằng thời gian + tên + nội dung (wishKey).
+  // Mỗi lời chúc chỉ hiện 1 lần mỗi lần vào web; chỉ xoay vòng lại khi đủ nhiều lời chúc
+  const REPEAT_MIN_WISHES = 5;
+  const shownWishKeys = new Set();
+
   function nextWish(list) {
     // Lời chúc mới (chưa thấy trong lần xem này, vd. ai đó vừa gửi) được ưu tiên hiện sớm
     const fresh = list.filter((w) => !seenWishKeys.has(wishKey(w)));
@@ -854,11 +859,19 @@
     wishQueue = wishQueue.filter((w) => alive.has(wishKey(w)));
 
     if (!wishQueue.length) {
-      wishQueue = shuffle(list.slice());
-      // vòng mới không mở đầu bằng đúng lời chúc vừa hiện
-      if (wishQueue.length > 1 && wishKey(wishQueue[0]) === lastWishKey) wishQueue.push(wishQueue.shift());
+      const unshown = list.filter((w) => !shownWishKeys.has(wishKey(w)));
+      if (unshown.length) {
+        wishQueue = shuffle(unshown);
+      } else if (list.length >= REPEAT_MIN_WISHES) {
+        wishQueue = shuffle(list.slice()); // đủ nhiều lời chúc -> vòng mới, trộn lại
+        // vòng mới không mở đầu bằng đúng lời chúc vừa hiện
+        if (wishKey(wishQueue[0]) === lastWishKey) wishQueue.push(wishQueue.shift());
+      } else {
+        return null; // ít lời chúc và đã hiện hết -> thôi, không lặp lại
+      }
     }
     const w = wishQueue.shift();
+    shownWishKeys.add(wishKey(w));
     lastWishKey = wishKey(w);
     return w;
   }
@@ -871,6 +884,7 @@
     if (!list.length || busy) return;
 
     const w = nextWish(list);
+    if (!w) return;
     wishToastIndex++;
     const msg = w.message.length > 70 ? `${w.message.slice(0, 70).trim()}…` : w.message;
 
