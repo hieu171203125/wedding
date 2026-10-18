@@ -1,0 +1,22 @@
+# Tự deploy thiệp lên Firebase Hosting mỗi khi push lên nhánh master.
+# Cần secret FIREBASE_SERVICE_ACCOUNT (nội dung file .json của service account Firebase)
+# trong GitHub: Settings -> Secrets and variables -> Actions.
+name: Deploy Firebase Hosting
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: # cho phép bấm chạy tay trong tab Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: wedding-44ae2
+          channelId: live
