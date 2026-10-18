@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="p" cx="0.5" cy="0.95" r="0.95">
+      <stop offset="0" stop-color="#fff1f6"/>
+      <stop offset="0.55" stop-color="#f7a8c8"/>
+      <stop offset="1" stop-color="#e2729c"/>
+    </radialGradient>
+    <!-- 1 cánh hoa anh đào: gốc ở tâm, đầu cánh có khía chữ V -->
+    <path id="petal" d="M32 32 C22 26 19 13 25 6 C27 4 29 5 30 7 L32 10 L34 7 C35 5 37 4 39 6 C45 13 42 26 32 32Z"/>
+  </defs>
+  <g fill="url(#p)" stroke="#c24d88" stroke-width="1.2" stroke-linejoin="round">
+    <use href="#petal"/>
+    <use href="#petal" transform="rotate(72 32 32)"/>
+    <use href="#petal" transform="rotate(144 32 32)"/>
+    <use href="#petal" transform="rotate(216 32 32)"/>
+    <use href="#petal" transform="rotate(288 32 32)"/>
+  </g>
+  <!-- nhuỵ -->
+  <g stroke="#c24d88" stroke-width="1.4" stroke-linecap="round">
+    <path d="M32 32 L32 24"/><path d="M32 32 L39.6 29.5"/><path d="M32 32 L36.7 38.5"/>
+    <path d="M32 32 L27.3 38.5"/><path d="M32 32 L24.4 29.5"/>
+  </g>
+  <g fill="#f5c542">
+    <circle cx="32" cy="23.5" r="1.8"/><circle cx="40" cy="29.3" r="1.8"/><circle cx="37" cy="39" r="1.8"/>
+    <circle cx="27" cy="39" r="1.8"/><circle cx="24" cy="29.3" r="1.8"/>
+  </g>
+  <circle cx="32" cy="32" r="3.2" fill="#f5c542" stroke="#d99b1e" stroke-width="1"/>
+</svg>
