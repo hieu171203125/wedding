@@ -3,36 +3,53 @@
    ========================================================= */
 
 :root {
-  --green: #86eb8c;
-  --green-soft: #e8fbea;
-  --green-mid: #5cc96a;
-  --green-deep: #2a7238;
-  --pink: #ed95c1;
-  --pink-soft: #fdeaf3;
-  --pink-deep: #c24d88;
-  --ink: #213326;
-  --muted: #5b6b60;
-  --paper: #fbfdf9;
-  --white: #ffffff;
-  --line: rgba(42, 114, 56, 0.16);
+  /* Theme "Sơn mài & Giấy dó": giấy ngà + đỏ sơn mài (từ bìa) + vàng kim.
+     Giữ tên biến cũ: họ "green" = ĐỎ (màu chính), họ "pink" = VÀNG KIM (điểm nhấn) */
+  --green: #bd3247;        /* đỏ bìa; nền nút/nhãn. #FFF8EC trên nền này 5.36:1 */
+  --green-soft: #f7e9e2;   /* giấy hồng đào nhạt (nền section xen kẽ) */
+  --green-mid: #9e2236;    /* đỏ đậm: viền, hover, cuối gradient */
+  --green-deep: #8e1f2f;   /* chữ tiêu đề/tên. trên --paper 8.17:1 */
+  --pink: #a7822f;         /* vàng đồng: icon, viền, focus ring, chữ lớn */
+  --pink-soft: #f5ecd7;    /* nền vàng giấy */
+  --pink-deep: #7a5c14;    /* chữ vàng đậm (eyebrow, nhãn nhỏ). trên --paper 5.79:1 */
+  --ink: #2a1a17;          /* chữ chính nâu mực */
+  --muted: #6b5048;        /* chữ phụ. trên --paper 6.80:1 */
+  --paper: #fbf6ec;        /* ngà giấy dó */
+  --white: #fffdf8;        /* thẻ/card trắng ngà */
+  --line: rgba(167, 130, 47, 0.28);
+
+  --paper-deep: #f4eadb;   /* nền section đậm hơn (story, album) */
+  --gold-line: #d9be7a;    /* chỉ trang trí: đường kẻ, hoa rơi — không dùng cho chữ */
+  --on-red: #fff8ec;       /* chữ trên nền đỏ */
+  --on-red-gold: #fff0aa;  /* chữ vàng trên nền đỏ: 4.93:1 trên #bd3247 */
+  --line-strong: #a88a4a;  /* viền ô nhập: ≥3:1 (WCAG 1.4.11) */
+  --lacquer: #5e1220;      /* đỏ sơn mài tối nhất (nền sau các trang) */
+  --shadow-sm: 0 8px 20px rgba(94, 18, 32, 0.08);
+  --shadow-md: 0 14px 34px rgba(94, 18, 32, 0.12);
+  --shadow-red: 0 10px 24px rgba(142, 31, 47, 0.28);
 
   --font-script: "Great Vibes", cursive;
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace; /* nhãn kiểu ticket/Jira */
 
   --ease-page: cubic-bezier(0.77, 0, 0.18, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* ẢNH — thay gradient bằng url('images/ten-anh.jpg') */
+  /* Hoạ tiết mây của bìa, bản mờ cho trang trong */
+  --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 20 C10 20, 5 30, 15 40 C25 50, 40 40, 30 30 C25 25, 20 30, 25 35 C30 40, 40 30, 35 20 M60 60 C50 60, 45 70, 55 80 C65 90, 80 80, 70 70 C65 65, 60 70, 65 75 C70 80, 80 70, 75 60' fill='none' stroke='%23a7822f' stroke-opacity='.13' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  --cloud-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 20 C10 20, 5 30, 15 40 C25 50, 40 40, 30 30 C25 25, 20 30, 25 35 C30 40, 40 30, 35 20 M60 60 C50 60, 45 70, 55 80 C65 90, 80 80, 70 70 C65 65, 60 70, 65 75 C70 80, 80 70, 75 60' fill='none' stroke='%23fff0aa' stroke-opacity='.16' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  /* ẢNH */
   --photo-hero: url('images/codau_chure.webp');
   --photo-groom: url('images/chure.webp');
   --photo-bride: url('images/codau.webp');
-  --photo-1: linear-gradient(135deg, #a8f0ad, #4fb85d);
-  --photo-2: linear-gradient(135deg, #f7c6de, #e07aae);
-  --photo-3: linear-gradient(135deg, #c9f5cc, #ed95c1);
-  --photo-4: linear-gradient(135deg, #ed95c1, #86eb8c);
-  --photo-5: linear-gradient(135deg, #e8fbea, #5cc96a);
-  --photo-6: linear-gradient(135deg, #fdeaf3, #c24d88);
+  --photo-1: linear-gradient(135deg, #f5ecd7, #d9be7a);
+  --photo-2: linear-gradient(135deg, #f7e9e2, #d98a95);
+  --photo-3: linear-gradient(135deg, #fbf6ec, #e3c98f);
+  --photo-4: linear-gradient(135deg, #f4eadb, #bd3247);
+  --photo-5: linear-gradient(135deg, #fffdf8, #c9a24a);
+  --photo-6: linear-gradient(135deg, #f7e9e2, #8e1f2f);
 }
 
 *,
@@ -552,7 +569,7 @@ body.fp {
 .chip--solid {
   background: var(--green);
   border-color: var(--green);
-  color: #133d1d;
+  color: var(--on-red);
 }
 
 .chip--solid:hover {
@@ -567,18 +584,18 @@ body.fp {
   border: none;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--green), var(--green-mid));
-  color: #133d1d;
+  color: var(--on-red);
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(92, 201, 106, 0.35);
+  box-shadow: 0 10px 24px rgba(142, 31, 47, 0.35);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(92, 201, 106, 0.45);
+  box-shadow: 0 14px 30px rgba(142, 31, 47, 0.45);
 }
 
 .btn:active {
@@ -593,8 +610,9 @@ body.fp {
   text-align: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 12% 8%, rgba(237, 149, 193, 0.32), transparent 40%),
-    radial-gradient(circle at 92% 88%, rgba(134, 235, 140, 0.45), transparent 45%),
+    radial-gradient(circle at 50% 0%, rgba(201, 162, 74, 0.18), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(189, 50, 71, 0.10), transparent 45%),
+    var(--cloud) 0 0 / 90px 90px,
     var(--paper);
 }
 
@@ -604,10 +622,10 @@ body.fp {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 22% 32%, rgba(134, 235, 140, 0.45) 0 14%, transparent 15%),
-    radial-gradient(circle at 82% 18%, rgba(237, 149, 193, 0.4) 0 9%, transparent 10%),
-    radial-gradient(circle at 72% 78%, rgba(237, 149, 193, 0.3) 0 13%, transparent 14%),
-    radial-gradient(circle at 15% 85%, rgba(134, 235, 140, 0.3) 0 8%, transparent 9%);
+    radial-gradient(circle at 22% 32%, rgba(217, 190, 122, 0.38) 0 14%, transparent 15%),
+    radial-gradient(circle at 82% 18%, rgba(189, 50, 71, 0.14) 0 9%, transparent 10%),
+    radial-gradient(circle at 72% 78%, rgba(217, 190, 122, 0.30) 0 13%, transparent 14%),
+    radial-gradient(circle at 15% 85%, rgba(189, 50, 71, 0.10) 0 8%, transparent 9%);
   background-repeat: no-repeat;
   background-size: 120% 120%;
   background-position:
@@ -626,7 +644,7 @@ body.fp {
   border: 6px solid var(--white);
   box-shadow:
     0 0 0 1px var(--pink),
-    0 24px 50px rgba(42, 114, 56, 0.2);
+    0 24px 50px rgba(94, 18, 32, 0.2);
   transform: translate3d(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 12px), 0);
   transition: transform 0.4s ease-out;
 }
@@ -754,8 +772,8 @@ body.fp {
   border: 4px solid var(--white);
 }
 
-.person--groom .person__photo { box-shadow: 0 0 0 1px var(--green-mid), 0 16px 34px rgba(42, 114, 56, 0.18); }
-.person--bride .person__photo { box-shadow: 0 0 0 1px var(--pink), 0 16px 34px rgba(194, 77, 136, 0.18); }
+.person--groom .person__photo { box-shadow: 0 0 0 1px var(--green-mid), 0 16px 34px rgba(94, 18, 32, 0.18); }
+.person--bride .person__photo { box-shadow: 0 0 0 1px var(--pink), 0 16px 34px rgba(122, 92, 20, 0.18); }
 
 .ph {
   width: 100%;
@@ -800,8 +818,8 @@ body.fp {
    ========================================================= */
 .story {
   background:
-    radial-gradient(circle at 100% 0%, rgba(237, 149, 193, 0.25), transparent 40%),
-    var(--pink-soft);
+    radial-gradient(circle at 100% 0%, rgba(201, 162, 74, 0.16), transparent 40%),
+    var(--paper-deep);
 }
 
 .timeline {
@@ -848,7 +866,7 @@ body.fp {
   padding: 2px 10px;
   border-radius: 999px;
   background: var(--green);
-  color: #133d1d;
+  color: var(--on-red);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -891,8 +909,8 @@ body.fp {
    ========================================================= */
 .countdown-sec {
   background:
-    radial-gradient(circle at 0% 100%, rgba(134, 235, 140, 0.5), transparent 45%),
-    radial-gradient(circle at 100% 0%, rgba(237, 149, 193, 0.35), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(189, 50, 71, 0.08), transparent 45%),
+    radial-gradient(circle at 100% 0%, rgba(201, 162, 74, 0.18), transparent 40%),
     var(--paper);
 }
 
@@ -909,7 +927,7 @@ body.fp {
   border-radius: 16px;
   background: var(--white);
   border: 1px solid var(--line);
-  box-shadow: 0 8px 20px rgba(42, 114, 56, 0.08);
+  box-shadow: 0 8px 20px rgba(94, 18, 32, 0.08);
 }
 
 .countdown__item span {
@@ -944,7 +962,7 @@ body.fp {
   border-radius: 22px;
   background: var(--white);
   border: 1px solid var(--line);
-  box-shadow: 0 16px 40px rgba(42, 114, 56, 0.1);
+  box-shadow: 0 16px 40px rgba(94, 18, 32, 0.1);
 }
 
 .calendar__head {
@@ -1020,7 +1038,7 @@ body.fp {
   border-radius: 20px;
   background: var(--white);
   border: 1px solid var(--line);
-  box-shadow: 0 8px 22px rgba(42, 114, 56, 0.07);
+  box-shadow: 0 8px 22px rgba(94, 18, 32, 0.07);
   text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
   /* cột dọc để nút "Chỉ đường" luôn nằm đáy thẻ -> 2 thẻ có nút thẳng hàng */
@@ -1041,7 +1059,7 @@ body.fp {
 .card[data-address]:hover {
   transform: translateY(-3px);
   border-color: var(--green-mid);
-  box-shadow: 0 0 0 2px var(--green), 0 14px 30px rgba(42, 114, 56, 0.16);
+  box-shadow: 0 0 0 2px var(--green), 0 14px 30px rgba(94, 18, 32, 0.16);
 }
 
 .card[data-address]:active {
@@ -1140,31 +1158,6 @@ body.fp {
   flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
 }
 
-.album__dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.album__dot {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: var(--pink);
-  opacity: 0.4;
-  cursor: pointer;
-  transition: width 0.3s ease, opacity 0.3s ease;
-}
-
-.album__dot.is-active {
-  width: 22px;
-  opacity: 1;
-  background: var(--pink-deep);
-}
-
 .g {
   position: relative;
   overflow: hidden;
@@ -1176,7 +1169,7 @@ body.fp {
   background:
     var(--img, none) var(--pos, center) / cover no-repeat,
     var(--ph, var(--photo-1));
-  box-shadow: 0 10px 26px rgba(42, 114, 56, 0.14);
+  box-shadow: 0 10px 26px rgba(94, 18, 32, 0.14);
 }
 
 .g::after {
@@ -1223,7 +1216,7 @@ body.fp {
    ========================================================= */
 .wishes-sec {
   background:
-    radial-gradient(circle at 0% 0%, rgba(237, 149, 193, 0.3), transparent 40%),
+    radial-gradient(circle at 0% 0%, rgba(201, 162, 74, 0.18), transparent 40%),
     var(--green-soft);
 }
 
@@ -1240,7 +1233,7 @@ body.fp {
   padding: 18px;
   border-radius: 22px;
   background: var(--white);
-  box-shadow: 0 12px 30px rgba(42, 114, 56, 0.1);
+  box-shadow: 0 12px 30px rgba(94, 18, 32, 0.1);
   text-align: left;
 }
 
@@ -1263,7 +1256,7 @@ body.fp {
 .form textarea {
   width: 100%;
   padding: 11px 14px;
-  border: 1px solid #d5e6d8;
+  border: 1px solid var(--line-strong);
   border-radius: 12px;
   background: var(--paper);
   font-size: 16px; /* tránh iOS tự zoom */
@@ -1279,8 +1272,8 @@ body.fp {
 .form select:focus,
 .form textarea:focus {
   outline: none;
-  border-color: var(--green-mid);
-  box-shadow: 0 0 0 3px rgba(134, 235, 140, 0.35);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(189, 50, 71, 0.18);
 }
 
 /* ---------- Xác nhận tham dự (modal) ---------- */
@@ -1308,7 +1301,7 @@ body.fp {
   color: var(--pink-deep);
   font-size: 12.5px;
   font-weight: 600;
-  box-shadow: 0 6px 16px rgba(194, 77, 136, 0.22);
+  box-shadow: 0 6px 16px rgba(122, 92, 20, 0.22);
   cursor: pointer;
   animation: fabIn 0.5s var(--ease-out) both;
 }
@@ -1320,7 +1313,7 @@ body.fp {
 .rsvp-fab.is-done {
   border-color: var(--green-mid);
   color: var(--green-deep);
-  box-shadow: 0 8px 20px rgba(42, 114, 56, 0.2);
+  box-shadow: 0 8px 20px rgba(94, 18, 32, 0.2);
 }
 
 @keyframes fabIn {
@@ -1456,7 +1449,7 @@ body.fp {
 .rsvp__choice span {
   display: block;
   padding: 11px 6px;
-  border: 1px solid #d5e6d8;
+  border: 1px solid var(--line-strong);
   border-radius: 12px;
   background: var(--paper);
   text-align: center;
@@ -1504,7 +1497,7 @@ body.fp {
   padding: 28px 22px;
   border-radius: 22px;
   background: var(--white);
-  box-shadow: 0 12px 30px rgba(42, 114, 56, 0.1);
+  box-shadow: 0 12px 30px rgba(94, 18, 32, 0.1);
 }
 
 .rsvp__done[hidden] {
@@ -1581,14 +1574,6 @@ body.fp {
   color: var(--muted);
 }
 
-.wishes__badge {
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: var(--green-soft);
-  color: var(--green-deep);
-  font-weight: 500;
-}
-
 .wishes__empty {
   font-family: var(--font-serif);
   font-style: italic;
@@ -1604,11 +1589,7 @@ body.fp {
   background:
     radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.45), transparent 55%),
     linear-gradient(165deg, var(--green) 0%, #6fdc78 55%, var(--pink) 130%);
-  color: #133d1d;
-}
-
-.thanks .eyebrow {
-  color: #8c2d5f;
+  color: var(--on-red);
 }
 
 .thanks__names {
@@ -1646,22 +1627,6 @@ body.fp {
   gap: 8px;
 }
 
-.dots__dot {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: 1px solid var(--pink-deep);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transition: height 0.3s var(--ease-out), background 0.3s;
-}
-
-.dots__dot.is-active {
-  height: 22px;
-  background: var(--pink);
-}
-
 .music-btn {
   position: fixed;
   right: 14px;
@@ -1676,7 +1641,7 @@ body.fp {
   background: var(--white);
   color: var(--pink-deep);
   font-size: 20px;
-  box-shadow: 0 8px 20px rgba(194, 77, 136, 0.25);
+  box-shadow: 0 8px 20px rgba(122, 92, 20, 0.25);
   cursor: pointer;
 }
 
@@ -1708,9 +1673,6 @@ body.fp {
   animation: fall linear forwards;
 }
 
-.petal--pink  { color: var(--pink); }
-.petal--green { color: var(--green-mid); }
-
 .petal--burst {
   animation: burst ease-out forwards;
 }
@@ -1734,10 +1696,9 @@ body.fp {
 
 .lightbox__frame {
   position: relative;
-  width: 100%;
-  max-width: 900px;
-  aspect-ratio: 3 / 4;
-  max-height: 78vh;
+  /* khung theo tỉ lệ ảnh cưới (dọc 2:3), vừa màn hình; ảnh hiện trọn (contain trong script.js) */
+  width: min(92vw, calc(86vh * 2 / 3), 640px);
+  aspect-ratio: 2 / 3;
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: zoomIn 0.4s var(--ease-out);
@@ -1815,15 +1776,6 @@ body.fp {
 /* =========================================================
    Keyframes
    ========================================================= */
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.35), 0 0 40px rgba(237, 149, 193, 0.35); }
-  50%      { box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.2), 0 0 70px rgba(237, 149, 193, 0.55); }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 0.45; }
-  50%      { opacity: 1; }
-}
 
 @keyframes drift {
   0%   { transform: translate(0, 0) rotate(0deg); }
@@ -1860,6 +1812,287 @@ body.fp {
 
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.94); }
+}
+
+/* =========================================================
+   Giao diện "Sơn mài & Giấy dó" (đề xuất của agent ui-ux-designer)
+   Giấy ngà + đỏ sơn mài + vàng kim, nối liền với bìa thiệp đỏ/vàng.
+   Đặt trước phần Responsive để các rule desktop phía sau vẫn được ưu tiên.
+   ========================================================= */
+body { font-weight: 400; } /* 300 quá mảnh trên Android/Zalo */
+::selection { background: var(--pink-soft); color: var(--green-deep); }
+
+/* Nền lộ ra giữa hai trang khi chuyển = bàn sơn mài đỏ (nối với bìa) */
+body.fp { background: radial-gradient(circle at 50% 45%, #a3263a, var(--lacquer) 75%); }
+
+/* Nhãn kiểu ticket/Jira: font mono */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 4.2vw, 32px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--pink-deep);
+}
+.section__sub { font-weight: 500; }
+
+.divider { color: var(--pink); }
+.divider::before, .divider::after { background: linear-gradient(90deg, transparent, var(--gold-line), transparent); }
+
+.floater { color: var(--pink); }
+.floater:nth-child(even) { color: var(--green); }
+.fp .slide.active .floater { opacity: 0.22; }
+
+/* ---------- Nút ---------- */
+.chip { min-height: 44px; padding: 10px 18px; border: 1px solid var(--green-mid); background: var(--white); color: var(--green-deep); }
+.chip:hover { background: var(--green-soft); }
+/* "Chỉ đường" = nút phụ (giấy vàng + chữ đỏ), để nút Xác nhận đỏ là CTA chính */
+.chip--solid { background: var(--pink-soft); border-color: var(--pink); color: var(--green-deep); }
+.chip--solid:hover { background: #efe1bf; border-color: var(--pink-deep); }
+
+.btn {
+  background: linear-gradient(90deg, var(--green), var(--green-mid));
+  color: var(--on-red);
+  box-shadow: var(--shadow-red), inset 0 0 0 1px rgba(255, 240, 170, 0.28);
+}
+.btn:hover { box-shadow: 0 14px 30px rgba(142, 31, 47, 0.38), inset 0 0 0 1px rgba(255, 240, 170, 0.35); }
+
+/* ---------- Focus (bàn phím) ---------- */
+.btn:focus-visible, .chip:focus-visible, .rsvp-fab:focus-visible, .music-btn:focus-visible,
+.album__nav:focus-visible, .album__dot:focus-visible, .dots__dot:focus-visible,
+.nav__links a:focus-visible, .card[data-address]:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+.g:focus-visible { outline: 3px solid var(--green); outline-offset: -3px; }
+.rsvp-modal__close:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+/* ---------- Hero ---------- */
+.hero__photo {
+  border: 6px solid var(--white);
+  box-shadow:
+    0 0 0 1px var(--pink),
+    0 0 0 6px var(--paper),
+    0 0 0 7px var(--gold-line),
+    0 24px 50px rgba(94, 18, 32, 0.18);
+}
+.hero__photo-img { background-color: var(--pink-soft); }
+.hero__amp { color: var(--pink); }
+.hero__date { color: var(--ink); }
+.hero__scroll { color: var(--green-deep); }
+.hero__scroll i { color: var(--pink); }
+
+/* ---------- Cô dâu chú rể ---------- */
+.person--groom .person__photo,
+.person--bride .person__photo { box-shadow: 0 0 0 1px var(--pink), 0 16px 34px rgba(94, 18, 32, 0.16); }
+.person--groom .ph { background: var(--photo-groom) 50% 22% / cover var(--pink-soft); }
+.person--bride .ph { background: var(--photo-bride) 50% 34% / cover var(--green-soft); }
+.couple__heart { color: var(--green); }
+.person__role { font-size: 11px; letter-spacing: 0.24em; }
+
+/* ---------- Chuyện tình: timeline + nhãn trạng thái ---------- */
+.timeline::before { background: linear-gradient(var(--gold-line), var(--green)); }
+.timeline__item::before { background: var(--white); border: 2px solid var(--pink); color: var(--green); }
+.timeline__item:last-child::before { background: var(--green); border-color: var(--green); color: var(--on-red-gold); }
+.timeline__date {
+  background: var(--green);
+  color: var(--on-red);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+.timeline__item h3.status { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; border-radius: 3px; }
+.status--todo     { background: #ede6da; color: #5a4a3f; }
+.status--progress { background: #f5e7c4; color: #6e5210; }
+.status--resolved { background: #f7e1e1; color: var(--green-deep); }
+.status--closed   { background: var(--green-deep); color: var(--on-red-gold); box-shadow: none; }
+.timeline__item p { font-size: 15px; }
+
+/* ---------- Đếm ngược + lịch ---------- */
+.countdown__item {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--gold-line);
+  box-shadow: var(--shadow-sm);
+}
+.countdown__item small { font-size: 11px; color: var(--pink-deep); }
+.calendar { position: relative; background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
+.calendar::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  pointer-events: none;
+}
+.calendar__day.is-wedding {
+  position: relative;
+  background: var(--green);
+  color: var(--on-red);
+  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--white), 0 0 0 3px var(--pink);
+}
+.calendar__day.is-wedding::after { color: var(--green-deep); }
+
+/* ---------- Lễ cưới: thẻ (dải vàng / dải đỏ phía trên như khung cửa) ---------- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 3px 0 var(--gold-line), var(--shadow-sm);
+}
+.card--featured {
+  background: linear-gradient(150deg, var(--white), var(--pink-soft));
+  border-color: var(--gold-line);
+  box-shadow: inset 0 3px 0 var(--green), var(--shadow-sm);
+}
+.card[data-address]:hover {
+  border-color: var(--green-mid);
+  box-shadow: inset 0 3px 0 var(--green), 0 0 0 2px var(--green), 0 14px 30px rgba(94, 18, 32, 0.16);
+}
+.card h3 { color: var(--green-deep); }
+.card__tag { background: var(--pink-soft); color: var(--pink-deep); }
+.card--featured .card__tag { background: var(--green); color: var(--on-red); }
+
+/* ---------- Album ---------- */
+.g { box-shadow: 0 0 0 1px var(--line), var(--shadow-md); }
+.album__nav {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 253, 248, 0.94);
+  color: var(--green-deep);
+  box-shadow: 0 0 0 1px var(--line), 0 6px 16px rgba(58, 14, 22, 0.18);
+}
+/* chấm phân trang: vùng chạm 22x24px, chấm nhìn thấy vẽ bằng ::after */
+.album__dots { display: flex; justify-content: center; gap: 0; margin-top: 6px; }
+.album__dot {
+  position: relative;
+  width: 22px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 1;
+  cursor: pointer;
+  transition: width 0.3s ease;
+}
+.album__dot::after {
+  content: "";
+  position: absolute;
+  inset: 8px 7px;
+  border-radius: 999px;
+  background: var(--pink);
+  opacity: 0.4;
+  transition: opacity 0.3s, background 0.3s;
+}
+.album__dot.is-active { width: 34px; background: none; }
+.album__dot.is-active::after { background: var(--green); opacity: 1; }
+
+/* ---------- Lời chúc ---------- */
+.form { background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
+.form input, .form select, .form textarea { border: 1px solid var(--line-strong); background: var(--paper); }
+.wishes__title { color: var(--green-deep); }
+.wishes__title span { background: var(--green); color: var(--on-red); }
+.wishes__list li { background: var(--white); border-left: 3px solid var(--pink); box-shadow: var(--shadow-sm); }
+
+/* ---------- Lời cảm ơn: đỏ + vàng, khép lại như bìa ---------- */
+.thanks {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 240, 170, 0.14), transparent 55%),
+    var(--cloud-light) 0 0 / 90px 90px,
+    linear-gradient(165deg, #a3263a 0%, var(--green-deep) 55%, #6e1624 100%);
+  color: var(--on-red);
+}
+.thanks::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 0;
+  pointer-events: none;
+  border: 1px solid rgba(230, 202, 101, 0.7);
+  outline: 1px solid rgba(255, 240, 170, 0.35);
+  outline-offset: -6px;
+  border-radius: 12px;
+}
+.thanks .eyebrow { color: var(--on-red-gold); }
+.thanks__names { color: var(--on-red-gold); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); }
+.thanks__date { font-family: var(--font-mono); font-weight: 500; color: var(--on-red-gold); }
+.thanks .floater { color: var(--on-red-gold); }
+
+/* ---------- Modal xác nhận + nút nổi ---------- */
+.rsvp-modal {
+  background: var(--cloud) 0 0 / 90px 90px, var(--paper);
+  border: 1px solid var(--gold-line);
+  outline: 1px solid var(--line);
+  outline-offset: -8px;
+  box-shadow: 0 24px 60px rgba(58, 14, 22, 0.35);
+}
+.rsvp-modal::backdrop { background: rgba(58, 14, 22, 0.55); backdrop-filter: blur(3px); }
+.rsvp-modal .form { background: none; border: 0; }
+.rsvp-modal .form input, .rsvp-modal .form select, .rsvp-modal .form textarea,
+.rsvp-modal .rsvp__choice span { background: var(--white); }
+.rsvp-modal__close { width: 44px; height: 44px; top: 8px; right: 8px; background: var(--pink-soft); color: var(--green-deep); }
+.rsvp__choice span { border: 1px solid var(--line-strong); min-height: 44px; }
+.rsvp__done { background: var(--white); box-shadow: var(--shadow-md); }
+
+.rsvp-fab {
+  gap: 6px;
+  height: 44px;
+  padding: 0 16px 0 13px;
+  border: 1px solid var(--gold-line);
+  background: linear-gradient(90deg, var(--green), var(--green-mid));
+  color: var(--on-red);
+  font-size: 13px;
+  box-shadow: var(--shadow-red), inset 0 0 0 1px rgba(255, 240, 170, 0.25);
+}
+.rsvp-fab.is-done {
+  background: var(--white);
+  border-color: var(--green-mid);
+  color: var(--green-deep);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Chấm điều hướng section: vùng chạm 24x24px ---------- */
+.dots { right: 0; gap: 0; }
+.dots__dot {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: height 0.3s var(--ease-out);
+}
+.dots__dot::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--pink-deep);
+  background: rgba(255, 253, 248, 0.75);
+  transition: background 0.3s;
+}
+.dots__dot.is-active { height: 38px; background: none; }
+.dots__dot.is-active::after {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 0 0 2px rgba(255, 253, 248, 0.85);
+}
+
+/* ---------- Menu, nút nhạc, toast, lightbox, hoa rơi ---------- */
+.nav--solid { background: rgba(251, 246, 236, 0.88); box-shadow: 0 4px 20px rgba(94, 18, 32, 0.08); }
+.nav__logo span { color: var(--pink); }
+.music-btn { border: 2px solid var(--pink); color: var(--green-deep); box-shadow: 0 8px 20px rgba(122, 92, 20, 0.22); }
+.music-btn:not(.is-playing)::after { background: var(--green-deep); }
+.toast { background: var(--green-deep); color: var(--on-red); }
+.lightbox { background: rgba(36, 12, 14, 0.9); }
+.petal--pink  { color: var(--gold-line); text-shadow: 0 1px 2px rgba(94, 18, 32, 0.25); }
+.petal--green { color: #d9576b; }
+
+/* Giảm chuyển động: chỉ tắt hoa rơi + hiệu ứng lặp trang trí (slider vẫn chạy) */
+@media (prefers-reduced-motion: reduce) {
+  .petals, .floaters { display: none; }
+  .couple__heart.in, .calendar__day.is-wedding, .music-btn.is-playing, .hero__scroll i { animation: none; }
 }
 
 /* =========================================================
@@ -1908,14 +2141,14 @@ body.fp {
   .form { padding: 26px; gap: 14px; }
   .wishes__list { max-height: 380px; }
 
-  .dots { right: 20px; gap: 12px; }
-  .dots__dot { width: 10px; height: 10px; }
-  .dots__dot.is-active { height: 28px; }
+  .dots { right: 12px; gap: 0; }
+  .dots__dot { width: 26px; height: 26px; }
+  .dots__dot.is-active { height: 46px; }
 
   .music-btn { right: 24px; bottom: 24px; width: 52px; height: 52px; }
 
   .lightbox { gap: 18px; }
-  .lightbox__frame { aspect-ratio: 4 / 3; width: min(78vw, 900px); }
+  .lightbox__frame { width: min(78vw, calc(86vh * 2 / 3), 640px); }
   .lightbox__nav { position: static; flex-shrink: 0; }
 }
 
@@ -1937,7 +2170,7 @@ body.fp {
   .nav--solid {
     background: rgba(251, 253, 249, 0.85);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(42, 114, 56, 0.08);
+    box-shadow: 0 4px 20px rgba(94, 18, 32, 0.08);
   }
 
   .nav__logo {

@@ -2,8 +2,6 @@
   "use strict";
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
-  // Luôn chạy hiệu ứng (như 13-9), kể cả khi máy bật "giảm chuyển động"
-  const reduceMotion = false;
   const body = document.body;
   const lightbox = $("#lightbox");
 
@@ -30,7 +28,7 @@
   const slider = $("#slider");
   const slides = $$(".slide");
   const ANIM_SEL = ".a-up, .a-left, .a-right, .a-zoom, .a-pop, .a-fade, .a-mask";
-  const DURATION = reduceMotion ? 250 : 850; // khoá điều hướng trong lúc chuyển (như 13-9)
+  const DURATION = 850; // khoá điều hướng trong lúc chuyển (như 13-9)
   const GESTURE_GAP = 200; // ms không có wheel event => coi là gesture mới
 
   let current = 0;
@@ -286,7 +284,7 @@
     e.preventDefault();
     const slide = slides[current];
     if (canScrollWithin(slide.lastElementChild, dir) || canScrollWithin(slide, dir)) {
-      slide.scrollBy({ top: dir * slide.clientHeight * 0.7, behavior: reduceMotion ? "auto" : "smooth" });
+      slide.scrollBy({ top: dir * slide.clientHeight * 0.7, behavior: "smooth" });
       return;
     }
     goTo(current + dir);
@@ -337,17 +335,15 @@
 
   /* ----- Parallax theo con trỏ ở hero ----- */
   const hero = slides[0];
-  if (!reduceMotion) {
-    window.addEventListener(
-      "pointermove",
-      (e) => {
-        if (current !== 0 || e.pointerType !== "mouse") return;
-        hero.style.setProperty("--mx", (e.clientX / innerWidth - 0.5).toFixed(3));
-        hero.style.setProperty("--my", (e.clientY / innerHeight - 0.5).toFixed(3));
-      },
-      { passive: true }
-    );
-  }
+  window.addEventListener(
+    "pointermove",
+    (e) => {
+      if (current !== 0 || e.pointerType !== "mouse") return;
+      hero.style.setProperty("--mx", (e.clientX / innerWidth - 0.5).toFixed(3));
+      hero.style.setProperty("--my", (e.clientY / innerHeight - 0.5).toFixed(3));
+    },
+    { passive: true }
+  );
 
   /* =========================================================
      Mở thiệp
@@ -464,7 +460,7 @@
      Hoa rơi
      ========================================================= */
   const petalLayer = $("#petals");
-  const PETALS = ["🌸", "❀", "✿", "🍃", "🍀", "🐱"];
+  const PETALS = ["🌸", "❀", "✿", "❁", "🍀", "🐱"];
   let petalTimer = null;
 
   const PETAL_EVERY = 450; // ms giữa 2 cánh hoa rơi — nhỏ hơn = dày hơn
@@ -498,12 +494,11 @@
   }
 
   function burstPetals(n) {
-    if (reduceMotion) return;
     for (let i = 0; i < n; i++) spawnPetal(true);
   }
 
   function startPetals() {
-    if (reduceMotion || petalTimer) return;
+    if (petalTimer) return;
     for (let i = 0; i < 14; i++) spawnPetal(false, true);
     petalTimer = setInterval(() => {
       if (!document.hidden) spawnPetal();
@@ -639,8 +634,8 @@
     photoIndex = (i + photos.length) % photos.length;
     const src = photos[photoIndex];
     frame.style.backgroundImage = getComputedStyle(src).backgroundImage;
-    frame.style.backgroundPosition = getComputedStyle(src).backgroundPosition;
-    frame.style.backgroundSize = "cover";
+    frame.style.backgroundPosition = "center";
+    frame.style.backgroundSize = "contain"; // hiện trọn ảnh, không cắt
     frame.style.backgroundRepeat = "no-repeat";
     $("figcaption", frame).textContent = $("figcaption", src)?.textContent || "";
   }
@@ -706,7 +701,6 @@
   const wishCount = $("#wish-count");
   const wishesEmpty = $("#wishes-empty");
   const STORAGE_KEY = "wedding-hieu-chi-wishes";
-  const ATTEND_LABEL = { yes: "Sẽ tham dự", maybe: "Chưa chắc", no: "Không tham dự" };
 
   // URL "Ứng dụng web" của Google Apps Script (xem apps-script/Code.gs).
   // Để trống -> lời chúc chỉ lưu trên trình duyệt của khách như trước.
@@ -758,15 +752,10 @@
           const msg = document.createElement("p");
           const meta = document.createElement("div");
           const who = document.createElement("strong");
-          const badge = document.createElement("span");
           msg.textContent = `“${w.message}”`;
           who.textContent = w.name;
-          badge.className = "wishes__badge";
-          badge.textContent = w.attend === "yes"
-            ? `${ATTEND_LABEL.yes} · ${w.guests} người`
-            : ATTEND_LABEL[w.attend] || "";
           meta.className = "wishes__meta";
-          meta.append(who, badge);
+          meta.append(who);
           li.append(msg, meta);
           return li;
         })
