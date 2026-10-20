@@ -460,7 +460,7 @@
      Hoa rơi
      ========================================================= */
   const petalLayer = $("#petals");
-  const PETALS = ["🌸", "❀", "✿", "❁", "🍀", "🐱"];
+  const PETALS = ["🌸", "❀", "✿", "❁", "🍀"];
   let petalTimer = null;
 
   const PETAL_EVERY = 450; // ms giữa 2 cánh hoa rơi — nhỏ hơn = dày hơn

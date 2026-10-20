@@ -2086,8 +2086,8 @@ body.fp { background: radial-gradient(circle at 50% 45%, #a3263a, var(--lacquer)
 .music-btn:not(.is-playing)::after { background: var(--green-deep); }
 .toast { background: var(--green-deep); color: var(--on-red); }
 .lightbox { background: rgba(36, 12, 14, 0.9); }
-.petal--pink  { color: var(--gold-line); text-shadow: 0 1px 2px rgba(94, 18, 32, 0.25); }
-.petal--green { color: #d9576b; }
+.petal--pink  { color: #f2a7c0; text-shadow: 0 1px 2px rgba(94, 18, 32, 0.2); } /* hoa hồng phấn */
+.petal--green { color: #e57fa2; text-shadow: 0 1px 2px rgba(94, 18, 32, 0.2); } /* hoa hồng đậm */
 
 /* Giảm chuyển động: chỉ tắt hoa rơi + hiệu ứng lặp trang trí (slider vẫn chạy) */
 @media (prefers-reduced-motion: reduce) {
