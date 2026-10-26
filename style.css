@@ -41,9 +41,9 @@
   --cloud-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 20 C10 20, 5 30, 15 40 C25 50, 40 40, 30 30 C25 25, 20 30, 25 35 C30 40, 40 30, 35 20 M60 60 C50 60, 45 70, 55 80 C65 90, 80 80, 70 70 C65 65, 60 70, 65 75 C70 80, 80 70, 75 60' fill='none' stroke='%23fff0aa' stroke-opacity='.16' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
 
   /* ẢNH */
-  --photo-hero: url('images/codau_chure.webp');
-  --photo-groom: url('images/chure.webp');
-  --photo-bride: url('images/codau.webp');
+  --photo-hero: url('images/codau_chure_new.webp');
+  --photo-groom: url('images/anh-cr.webp');
+  --photo-bride: url('images/anh-cd.webp');
   --photo-1: linear-gradient(135deg, #f5ecd7, #d9be7a);
   --photo-2: linear-gradient(135deg, #f7e9e2, #d98a95);
   --photo-3: linear-gradient(135deg, #fbf6ec, #e3c98f);
