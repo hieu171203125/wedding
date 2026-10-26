@@ -20,3 +20,6 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: wedding-44ae2
           channelId: live
+          # 15.34.1 trở lên gọi thêm serviceusage.googleapis.com -> service account bị 403.
+          # Bỏ dòng này khi đã cấp role "Service Usage Consumer" cho service account.
+          firebaseToolsVersion: 15.34.0
