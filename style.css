@@ -645,8 +645,6 @@ body.fp {
   box-shadow:
     0 0 0 1px var(--pink),
     0 24px 50px rgba(94, 18, 32, 0.2);
-  transform: translate3d(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 12px), 0);
-  transition: transform 0.4s ease-out;
 }
 
 .hero__photo-img {
