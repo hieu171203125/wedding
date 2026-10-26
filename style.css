@@ -1145,7 +1145,6 @@ body.fp {
   display: flex;
   gap: var(--gap);
   transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-  will-change: transform;
 }
 
 .album__viewport.is-dragging .album__track {

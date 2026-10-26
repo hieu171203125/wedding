@@ -529,8 +529,40 @@
     // section có thể đang được thu nhỏ (--fit) -> đổi px trên màn hình sang px bố cục
     const screenScale = () => viewport.getBoundingClientRect().width / viewport.offsetWidth || 1;
 
+    // Tua vòng liền mạch: chép CLONES ảnh cuối lên đầu và CLONES ảnh đầu xuống cuối dải.
+    // Qua ảnh cuối thì trượt tiếp sang bản chép, hết hiệu ứng mới nhảy ngầm về ảnh thật
+    // (trước đây trượt ngược qua cả dải -> trông như khựng). CLONES >= --per lớn nhất.
+    const CLONES = 3;
+    const cloneOf = (ph) => {
+      const c = ph.cloneNode(true);
+      c.setAttribute("aria-hidden", "true");
+      return c;
+    };
+    track.prepend(...photos.slice(-CLONES).map(cloneOf));
+    track.append(...photos.slice(0, CLONES).map(cloneOf));
+    const posX = (i) => -(i + CLONES) * step(); // i có thể âm hoặc > maxIndex (đang ở bản chép)
+
     function setX(x) {
       track.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+
+    // Đặt vị trí ngay, không chạy hiệu ứng
+    function jumpTo(i) {
+      track.style.transition = "none";
+      setX(posX(i));
+      void track.offsetWidth; // ép trình duyệt áp vị trí mới trước khi bật lại transition
+      track.style.transition = "";
+    }
+
+    // Đang đứng ở bản chép -> hết hiệu ứng (0.5s trong CSS) thì nhảy về ảnh thật.
+    // Dùng hẹn giờ thay vì transitionend vì sự kiện này có thể không bắn (section ẩn, iOS...).
+    const SLIDE_MS = 520;
+    let pendingJump = null;
+    let jumpTimer = 0;
+    function flushJump() {
+      clearTimeout(jumpTimer);
+      if (pendingJump !== null) jumpTo(pendingJump);
+      pendingJump = null;
     }
 
     function renderDots() {
@@ -550,9 +582,18 @@
 
     function go(i, auto = false) {
       const max = maxIndex();
-      // tua vòng: qua ảnh cuối thì về đầu và ngược lại
-      index = i > max ? 0 : i < 0 ? max : i;
-      setX(-index * step());
+      flushJump(); // bấm nhanh khi chưa kịp nhảy về
+      if (i > max || i < 0) {
+        // tua vòng: trượt sang bản chép của trang đầu/cuối rồi nhảy ngầm về trang thật
+        const per = perView();
+        index = i > max ? 0 : max;
+        setX(posX(i > max ? max + per : -per));
+        pendingJump = index;
+        jumpTimer = setTimeout(flushJump, SLIDE_MS);
+      } else {
+        index = i;
+        setX(posX(index));
+      }
       [...dotsWrap.children].forEach((d, k) => d.classList.toggle("is-active", k === index));
       if (!auto) restartAuto(); // khách tự chuyển ảnh -> đếm lại 5s từ đầu
     }
@@ -574,7 +615,8 @@
     let drag = null;
     viewport.addEventListener("pointerdown", (e) => {
       if (e.button !== 0) return;
-      drag = { x: e.clientX, y: e.clientY, dx: 0, scale: screenScale(), base: -index * step() };
+      flushJump();
+      drag = { x: e.clientX, y: e.clientY, dx: 0, scale: screenScale(), base: posX(index) };
       albumDragged = false;
     });
     viewport.addEventListener("pointermove", (e) => {
@@ -589,8 +631,9 @@
       drag.dx = dx;
       // ra ngoài 2 đầu thì kéo nặng tay hơn
       const x = drag.base + dx;
-      const min = -maxIndex() * step();
-      setX(x > 0 ? x / 3 : x < min ? min + (x - min) / 3 : x);
+      const max = posX(0);
+      const min = posX(maxIndex());
+      setX(x > max ? max + (x - max) / 3 : x < min ? min + (x - min) / 3 : x);
     });
     const endDrag = () => {
       if (!drag) return;
@@ -627,6 +670,7 @@
     });
 
     renderDots();
+    jumpTo(0);
     go(0);
   })();
 
