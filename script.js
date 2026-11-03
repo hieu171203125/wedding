@@ -750,15 +750,20 @@
   // Để trống -> lời chúc chỉ lưu trên trình duyệt của khách như trước.
   const WISHES_API =
     "https://script.google.com/macros/s/AKfycbznY3o4Zv11cYPesb-tBDJ_Ilsbi4wBi-p5Hq8YV42-riOYewQye3bFuW3vP7TiR2wF/exec";
-  let remoteWishes = null; // lời chúc của mọi khách, lấy từ Google Sheet
+  const REMOTE_CACHE_KEY = "wedding-hieu-chi-wishes-remote"; // bản tải lần trước -> mở trang là có ngay
+  const readJSON = (key) => {
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    } catch {
+      return null;
+    }
+  };
+  // lời chúc của mọi khách, lấy từ Google Sheet (tạm dùng bản đã lưu từ lần trước)
+  let remoteWishes = WISHES_API ? readJSON(REMOTE_CACHE_KEY) : null;
+  let wishesPending = Boolean(WISHES_API) && !remoteWishes; // chưa có gì để hiện -> chưa hiện "0"
 
   function loadWishes() {
-    if (remoteWishes) return remoteWishes;
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    } catch {
-      return [];
-    }
+    return remoteWishes || readJSON(STORAGE_KEY) || [];
   }
 
   function fetchWishes() {
@@ -768,10 +773,18 @@
       .then((d) => {
         if (!d.ok) return;
         remoteWishes = d.wishes;
-        renderWishes();
+        try {
+          localStorage.setItem(REMOTE_CACHE_KEY, JSON.stringify(d.wishes));
+        } catch {
+          /* trình duyệt chặn storage */
+        }
       })
       .catch(() => {
         /* mạng lỗi: vẫn hiện lời chúc lưu trên máy */
+      })
+      .finally(() => {
+        wishesPending = false;
+        renderWishes();
       });
   }
 
@@ -785,8 +798,8 @@
 
   function renderWishes() {
     const list = loadWishes();
-    wishCount.textContent = list.length;
-    wishesEmpty.hidden = list.length > 0;
+    wishCount.textContent = wishesPending && !list.length ? "…" : list.length;
+    wishesEmpty.hidden = wishesPending || list.length > 0;
     wishesList.replaceChildren(
       ...list
         .slice()
@@ -847,7 +860,8 @@
       .finally(() => (btn.disabled = false));
   });
 
-  // Lấy lời chúc của mọi khách khi tới section Lời chúc (và mỗi lần quay lại)
+  // Lấy lời chúc của mọi khách ngay khi mở trang, và lấy lại mỗi lần tới section Lời chúc
+  fetchWishes();
   $("#wishes").addEventListener("slide:enter", fetchWishes);
 
   /* =========================================================
