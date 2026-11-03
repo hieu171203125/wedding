@@ -677,7 +677,16 @@
   function showPhoto(i) {
     photoIndex = (i + photos.length) % photos.length;
     const src = photos[photoIndex];
+    // hiện ngay bản nhẹ trong album, tải xong ảnh gốc (data-full) thì đổi sang
     frame.style.backgroundImage = getComputedStyle(src).backgroundImage;
+    const full = src.dataset.full;
+    if (full) {
+      const img = new Image();
+      img.onload = () => {
+        if (photos[photoIndex] === src && !lightbox.hidden) frame.style.backgroundImage = `url("${full}")`;
+      };
+      img.src = full;
+    }
     frame.style.backgroundPosition = "center";
     frame.style.backgroundSize = "contain"; // hiện trọn ảnh, không cắt
     frame.style.backgroundRepeat = "no-repeat";
