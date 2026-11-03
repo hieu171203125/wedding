@@ -1,0 +1,9 @@
+# Công cụ / ảnh chụp góp ý, không thuộc trang
+.claude/
+feedback/
+13-9/
+
+# Ảnh gốc bìa / cô dâu / chú rể (trang dùng bản images/xl)
+images/anh-cd.webp
+images/anh-cr.webp
+images/codau_chure_new.webp
