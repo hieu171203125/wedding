@@ -1163,10 +1163,22 @@ body.fp {
   user-select: none;
   cursor: pointer;
   /* ảnh thật (--img) phủ lên trên; chưa có file thì lộ màu gradient tạm (--ph) */
+  --img-use: var(--img, none);
   background:
-    var(--img, none) var(--pos, center) / cover no-repeat,
+    var(--img-use) var(--pos, center) / cover no-repeat,
     var(--ph, var(--photo-1));
   box-shadow: 0 10px 26px rgba(94, 18, 32, 0.14);
+}
+
+/* PC: dùng ảnh md (1600x2400) thay cho sm (1200x1800) để không bị mờ.
+   Ảnh bìa / cô dâu / chú rể cũng đổi sang md. */
+@media (min-width: 768px) {
+  .g { --img-use: var(--img-md, var(--img, none)); }
+  :root {
+    --photo-hero: url('images/md/codau_chure_new.webp?v=6');
+    --photo-groom: url('images/md/anh-cr.webp?v=6');
+    --photo-bride: url('images/md/anh-cd.webp?v=6');
+  }
 }
 
 .g::after {
