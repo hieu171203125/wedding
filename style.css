@@ -41,9 +41,10 @@
   --cloud-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 20 C10 20, 5 30, 15 40 C25 50, 40 40, 30 30 C25 25, 20 30, 25 35 C30 40, 40 30, 35 20 M60 60 C50 60, 45 70, 55 80 C65 90, 80 80, 70 70 C65 65, 60 70, 65 75 C70 80, 80 70, 75 60' fill='none' stroke='%23fff0aa' stroke-opacity='.16' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
 
   /* ẢNH */
-  --photo-hero: url('images/sm/codau_chure_new.webp?v=6');
-  --photo-groom: url('images/sm/anh-cr.webp?v=6');
-  --photo-bride: url('images/sm/anh-cd.webp?v=6');
+  /* chỉ 3 ảnh -> dùng bản xl (3200px) cho cả điện thoại lẫn PC */
+  --photo-hero: url('images/xl/codau_chure_new.webp?v=7');
+  --photo-groom: url('images/xl/anh-cr.webp?v=7');
+  --photo-bride: url('images/xl/anh-cd.webp?v=7');
   --photo-1: linear-gradient(135deg, #f5ecd7, #d9be7a);
   --photo-2: linear-gradient(135deg, #f7e9e2, #d98a95);
   --photo-3: linear-gradient(135deg, #fbf6ec, #e3c98f);
@@ -1170,15 +1171,9 @@ body.fp {
   box-shadow: 0 10px 26px rgba(94, 18, 32, 0.14);
 }
 
-/* PC: dùng ảnh md (1600x2400) thay cho sm (1200x1800) để không bị mờ.
-   Ảnh bìa / cô dâu / chú rể cũng đổi sang md. */
+/* PC: album dùng ảnh md (1600x2400) thay cho sm (1200x1800) để không bị mờ */
 @media (min-width: 768px) {
   .g { --img-use: var(--img-md, var(--img, none)); }
-  :root {
-    --photo-hero: url('images/md/codau_chure_new.webp?v=6');
-    --photo-groom: url('images/md/anh-cr.webp?v=6');
-    --photo-bride: url('images/md/anh-cd.webp?v=6');
-  }
 }
 
 .g::after {
