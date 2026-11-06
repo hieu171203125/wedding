@@ -10,10 +10,12 @@
   /* =========================================================
      Khách mời: link dạng ?to=Anh%20Tuấn -> in tên lên bìa + trang đầu
      ========================================================= */
-  const guest = (new URLSearchParams(location.search).get("to") || "")
+   const guest = (new URLSearchParams(location.search).get("to") || "")
+    .replace(/[_+]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 60);
+
 
   if (guest) {
     // textContent (không dùng innerHTML) -> tên trong link không chèn được mã HTML
